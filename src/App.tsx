@@ -226,9 +226,9 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 border-b border-outline-variant backdrop-blur-md">
-      <div className="max-w-[1280px] mx-auto px-8 h-20 grid grid-cols-[auto_1fr_auto] items-center">
-        <a className="flex items-center" href="/">
-          <img className="h-[22px] w-auto" src="/logo-dark.svg" alt="Bastion" />
+      <div className="max-w-[1280px] mx-auto px-5 md:px-8 h-16 md:h-20 grid grid-cols-[auto_1fr_auto] items-center">
+        <a className="flex items-center min-w-0" href="/">
+          <img className="h-[18px] md:h-[22px] w-auto max-w-[170px]" src="/logo-dark.svg" alt="Bastion" />
         </a>
         <div className="hidden md:flex items-center justify-center gap-4 text-center">
           {navItems.map(({ id, label }) => (
@@ -241,7 +241,7 @@ const Navbar = () => {
             </a>
           ))}
         </div>
-        <a className="bg-primary text-on-primary px-6 py-2.5 rounded-[10px] font-semibold text-sm hover:bg-graphite-900 active:scale-95 transition-all" href="mailto:sofia@bastiongroup.se">
+        <a className="hidden md:inline-flex bg-primary text-on-primary px-6 py-2.5 rounded-[10px] font-semibold text-sm whitespace-nowrap hover:bg-graphite-900 active:scale-95 transition-all" href="mailto:sofia@bastiongroup.se">
           Kontakta oss
         </a>
       </div>
@@ -250,13 +250,13 @@ const Navbar = () => {
 };
 
 const Hero = () => (
-  <section id="hero" className="anchor-section w-full relative overflow-hidden bg-transparent py-24 md:py-32">
+  <section id="hero" className="anchor-section w-full relative overflow-hidden bg-transparent pt-12 pb-16 md:py-32">
     <HeroImageIllustration />
-    <div className="max-w-[1280px] mx-auto px-8 relative z-20 flex flex-col items-start text-left">
+    <div className="max-w-[1280px] mx-auto px-5 md:px-8 relative z-20 flex flex-col items-start text-left">
       <motion.span 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="font-medium text-xs tracking-wider text-graphite-700 bg-primary-container px-4 py-1.5 rounded-[10px] mb-6 border border-outline-variant"
+        className="font-medium text-[10px] md:text-xs tracking-wider text-graphite-700 bg-primary-container px-3 md:px-4 py-1.5 rounded-[10px] mb-5 md:mb-6 border border-outline-variant"
       >
         SAMORDNAD FÄLTKAPACITET
       </motion.span>
@@ -265,7 +265,7 @@ const Hero = () => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="font-headline text-5xl md:text-6xl lg:text-7xl font-semibold text-on-surface mb-6 leading-[1.05] max-w-3xl tracking-tight"
+        className="font-headline text-4xl md:text-6xl lg:text-7xl font-semibold text-on-surface mb-5 md:mb-6 leading-[1.08] md:leading-[1.05] max-w-3xl tracking-tight"
       >
         Operativ kapacitet <span className="desktop-break" />för samhällskritisk <span className="desktop-break" />infrastruktur
       </motion.h1>
@@ -274,7 +274,7 @@ const Hero = () => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="text-2xl md:text-3xl text-on-surface font-semibold max-w-2xl mb-4 leading-[1.12] tracking-normal"
+        className="text-xl md:text-3xl text-on-surface font-semibold max-w-2xl mb-4 leading-[1.18] md:leading-[1.12] tracking-normal"
       >
         Från spridd kapacitet till organiserad förmåga
       </motion.p>
@@ -283,7 +283,7 @@ const Hero = () => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="text-base md:text-lg text-on-surface-variant max-w-3xl mb-10 leading-relaxed font-medium opacity-90"
+        className="text-base md:text-lg text-on-surface-variant max-w-3xl mb-6 md:mb-10 leading-relaxed font-medium opacity-90"
       >
         Bastion organiserar och samordnar bolag med operativ fältkapacitet för att driva, underhålla och återställa samhällskritisk infrastruktur.
       </motion.p>
@@ -292,12 +292,12 @@ const Hero = () => (
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.3 }}
-        className="flex flex-wrap gap-4"
+        className="grid w-full grid-cols-1 gap-3 sm:flex sm:w-auto sm:flex-wrap sm:gap-4"
       >
-        <a className="bg-primary text-on-primary px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 active:scale-95 transition-all flex items-center gap-2 shadow-sm shadow-black/10" href="#capacity">
+        <a className="hidden sm:flex bg-primary text-on-primary px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 active:scale-95 transition-all items-center justify-center gap-2 shadow-sm shadow-black/10" href="#capacity">
           Läs mer
         </a>
-        <a className="bg-white border border-outline-variant text-on-surface px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-100 active:scale-95 transition-all" href="#contact">
+        <a className="w-full sm:w-auto bg-primary sm:bg-white border border-primary sm:border-outline-variant text-on-primary sm:text-on-surface px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest text-center hover:bg-graphite-900 sm:hover:bg-graphite-100 active:scale-95 transition-all" href="#contact">
           Kontakt
         </a>
       </motion.div>
@@ -308,12 +308,12 @@ const Hero = () => (
 const CapacityCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
   <motion.div 
     whileHover={{ y: -5 }}
-    className="group relative min-h-[260px] bg-white border border-outline-variant px-8 pt-8 pb-10 rounded-[10px] hover:border-graphite-200 transition-all overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.04)]"
+    className="group relative min-h-[220px] md:min-h-[260px] bg-white border border-outline-variant px-6 md:px-8 pt-6 md:pt-8 pb-7 md:pb-10 rounded-[10px] hover:border-graphite-200 transition-all overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.04)]"
   >
     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
       <div className="w-24 h-24 dot-pattern-dense" />
     </div>
-    <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center mb-10 text-primary shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+    <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center mb-7 md:mb-10 text-primary shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
       <Icon size={24} strokeWidth={2.5} fill="currentColor" fillOpacity={0.1} />
     </div>
     <h3 className="font-headline text-2xl font-semibold text-on-surface mb-3 leading-[1.1] tracking-tight">{title}</h3>
@@ -322,8 +322,8 @@ const CapacityCard = ({ icon: Icon, title, description }: { icon: any, title: st
 );
 
 const CapacitySection = () => (
-  <section id="capacity" className="anchor-section max-w-[1280px] mx-auto px-8 py-12">
-    <div className="mb-8">
+  <section id="capacity" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-12">
+    <div className="mb-7 md:mb-8">
       <div className="mb-4">
         <SectionHeader label="Kapacitet" />
       </div>
@@ -357,13 +357,13 @@ const CapacitySection = () => (
 );
 
 const WhyBastionSection = () => (
-  <section id="why-bastion" className="anchor-section max-w-[1280px] mx-auto px-8 py-20">
-    <div className="mb-12">
+  <section id="why-bastion" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-12 md:py-20">
+    <div className="mb-8 md:mb-12">
       <SectionHeader label="SAMHÄLLSKRITISK INFRASTRUKTUR" />
     </div>
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-      <div className="space-y-10">
-        <h2 className="font-headline text-4xl md:text-5xl font-semibold text-on-surface leading-[1.08] tracking-normal">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+      <div className="space-y-7 md:space-y-10">
+        <h2 className="font-headline text-3xl md:text-5xl font-semibold text-on-surface leading-[1.08] tracking-normal">
           Varför Bastion behövs
         </h2>
         
@@ -388,23 +388,23 @@ const WhyBastionSection = () => (
 );
 
 const VilkaViArSection = () => (
-  <section id="vilka-vi-ar" className="anchor-section max-w-[1280px] mx-auto px-8 pt-20 pb-10">
-    <div className="rounded-[10px] bg-[#2E2A27] p-12 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+  <section id="vilka-vi-ar" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 pt-12 md:pt-20 pb-8 md:pb-10">
+    <div className="rounded-[10px] bg-[#2E2A27] p-6 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 items-center">
         <div className="lg:col-span-5">
           <div className="relative aspect-[4/3] w-full rounded-[10px] border border-outline-variant bg-gradient-to-b from-white to-graphite-100 overflow-hidden">
             <img className="h-full w-full object-cover brightness-90 contrast-95" src={vilkaViArImage} alt="" aria-hidden="true" />
           </div>
         </div>
-        <div className="lg:col-span-7 space-y-6">
+        <div className="lg:col-span-7 space-y-5 md:space-y-6">
           <h2 className="text-xs font-bold text-[#CFC8BE] tracking-[0.2em] uppercase">OM BASTION</h2>
-          <h3 className="font-headline text-4xl md:text-6xl font-semibold text-white tracking-normal leading-[1.05]">
+          <h3 className="font-headline text-3xl md:text-6xl font-semibold text-white tracking-normal leading-[1.08] md:leading-[1.05]">
             Vilka vi är
           </h3>
-          <p className="text-lg text-[#EAE7E2] max-w-2xl font-medium opacity-90 leading-relaxed">
+          <p className="text-base md:text-lg text-[#EAE7E2] max-w-2xl font-medium opacity-90 leading-relaxed">
             Bastion är initierat av personer med bakgrund inom energi, fastigheter, industri, säkerhet och beredskap.
           </p>
-          <p className="text-lg text-[#EAE7E2] max-w-2xl font-medium opacity-90 leading-relaxed">
+          <p className="text-base md:text-lg text-[#EAE7E2] max-w-2xl font-medium opacity-90 leading-relaxed">
             Vi har lång operativ erfarenhet av arbete nära samhällskritisk infrastruktur och entreprenörsdrivna bolag.
           </p>
         </div>
@@ -414,30 +414,30 @@ const VilkaViArSection = () => (
 );
 
 const CTASection = () => (
-  <section id="contact" className="anchor-section max-w-[1280px] mx-auto px-8 pt-10 pb-20">
-    <div className="rounded-[10px] bg-gradient-to-b from-white to-graphite-100 p-12 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-        <div className="lg:col-span-7 space-y-10">
-          <div className="space-y-6">
+  <section id="contact" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 pt-8 md:pt-10 pb-12 md:pb-20">
+    <div className="rounded-[10px] bg-gradient-to-b from-white to-graphite-100 p-6 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-start">
+        <div className="lg:col-span-7 space-y-8 md:space-y-10">
+          <div className="space-y-5 md:space-y-6">
             <h2 className="text-xs font-bold text-graphite-700 tracking-[0.2em] uppercase">KONTAKT</h2>
-            <h2 className="font-headline text-4xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.05]">
+            <h2 className="font-headline text-3xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.08] md:leading-[1.05]">
               Kontakt och dialog
             </h2>
-            <p className="text-lg text-on-surface-variant max-w-2xl font-medium opacity-90 leading-relaxed">
+            <p className="text-base md:text-lg text-on-surface-variant max-w-2xl font-medium opacity-90 leading-relaxed">
               För frågor om Bastions struktur, kapacitet eller samverkan kring samhällskritisk infrastruktur, kontakta oss via e-post.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <div className="flex items-center gap-4 text-on-surface group">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-8">
+            <div className="flex items-center gap-4 min-w-0 text-on-surface group">
               <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
                 <Mail size={20} strokeWidth={2.5} />
               </div>
-              <a className="font-bold hover:text-primary transition-colors" href="mailto:sofia@bastiongroup.se">
+              <a className="min-w-0 break-words font-bold hover:text-primary transition-colors" href="mailto:sofia@bastiongroup.se">
                 sofia@bastiongroup.se
               </a>
             </div>
-            <div className="flex items-center gap-4 text-on-surface group">
+            <div className="flex items-center gap-4 min-w-0 text-on-surface group">
               <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
                 <Phone size={20} strokeWidth={2.5} />
               </div>
@@ -451,7 +451,7 @@ const CTASection = () => (
             <motion.a 
               href="mailto:sofia@bastiongroup.se"
               whileTap={{ scale: 0.95 }}
-              className="bg-primary text-on-primary px-12 py-5 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 transition-all shadow-sm shadow-black/10"
+              className="inline-flex w-full sm:w-auto justify-center bg-primary text-on-primary px-8 md:px-12 py-4 md:py-5 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 transition-all shadow-sm shadow-black/10"
             >
               KONTAKTA OSS
             </motion.a>
@@ -459,19 +459,19 @@ const CTASection = () => (
         </div>
         
         <div className="lg:col-span-5 h-full">
-          <div className="bg-white/85 backdrop-blur-md p-10 rounded-[10px] border border-outline-variant shadow-sm shadow-graphite-900/5 h-full flex flex-col justify-center">
+          <div className="bg-white/85 backdrop-blur-md p-6 md:p-10 rounded-[10px] border border-outline-variant shadow-sm shadow-graphite-900/5 h-full flex flex-col justify-center">
             <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-on-surface mb-4 opacity-60">HÅLL DIG UPPDATERAD</h4>
             <p className="text-sm font-medium text-on-surface-variant mb-8 leading-relaxed">
               Anmäl dig för att ta del av uppdateringar om Bastions arbete och utveckling.
             </p>
             <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
               <input 
-                className="w-full bg-white border border-outline-variant rounded-[10px] px-5 py-4 text-sm focus:ring-2 focus:ring-graphite-200 focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/50 font-medium" 
+                className="w-full bg-white border border-outline-variant rounded-[10px] px-4 md:px-5 py-4 text-sm focus:ring-2 focus:ring-graphite-200 focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/50 font-medium" 
                 placeholder="Din mailadress" 
                 type="email" 
               />
               <button 
-                className="w-full bg-primary text-on-primary px-8 py-4 rounded-[10px] text-[10px] font-black tracking-[0.2em] hover:bg-graphite-900 transition-all uppercase"
+                className="w-full bg-primary text-on-primary px-5 md:px-8 py-4 rounded-[10px] text-[10px] font-black tracking-[0.2em] hover:bg-graphite-900 transition-all uppercase"
                 type="submit"
               >
                 PRENUMERERA
@@ -485,9 +485,9 @@ const CTASection = () => (
 );
 
 const Footer = () => (
-  <footer className="bg-gradient-to-b from-graphite-800 to-graphite-900 w-full py-16 border-t border-graphite-700 mt-20">
-    <div className="max-w-[1280px] mx-auto px-8">
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-start">
+  <footer className="bg-gradient-to-b from-graphite-800 to-graphite-900 w-full py-12 md:py-16 border-t border-graphite-700 mt-12 md:mt-20">
+    <div className="max-w-[1280px] mx-auto px-5 md:px-8">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-start">
         <div>
           <img className="h-7 w-auto" src="/logo-light.svg" alt="Bastion" />
         </div>
@@ -504,14 +504,14 @@ const Footer = () => (
 );
 
 const LegalSection = ({ children, id }: { children: ReactNode, id: string }) => (
-  <section id={id} className="anchor-section bg-white border border-outline-variant rounded-[10px] p-8 md:p-12 shadow-sm shadow-graphite-900/5">
+  <section id={id} className="anchor-section bg-white border border-outline-variant rounded-[10px] p-6 md:p-12 shadow-sm shadow-graphite-900/5">
     {children}
   </section>
 );
 
 const LegalPage = () => (
-  <main className="relative z-10 pt-32 pb-20">
-    <div className="max-w-[960px] mx-auto px-8">
+  <main className="relative z-10 pt-24 md:pt-32 pb-12 md:pb-20">
+    <div className="max-w-[960px] mx-auto px-5 md:px-8">
       <nav className="mb-10 flex flex-wrap gap-4" aria-label="Juridisk navigation">
         <a className="text-sm font-semibold text-primary border border-outline-variant rounded-[10px] px-4 py-2 hover:bg-graphite-100 transition-colors" href="#integritet">Integritetspolicy</a>
         <a className="text-sm font-semibold text-primary border border-outline-variant rounded-[10px] px-4 py-2 hover:bg-graphite-100 transition-colors" href="#villkor">Användarvillkor</a>
@@ -519,7 +519,7 @@ const LegalPage = () => (
 
       <div className="space-y-12">
         <LegalSection id="integritet">
-          <h1 className="font-headline text-4xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.05] mb-10">Integritetspolicy</h1>
+          <h1 className="font-headline text-3xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.08] md:leading-[1.05] mb-8 md:mb-10">Integritetspolicy</h1>
 
           <div className="space-y-8 text-on-surface-variant font-medium leading-relaxed">
             <div>
@@ -573,7 +573,7 @@ const LegalPage = () => (
         </LegalSection>
 
         <LegalSection id="villkor">
-          <h2 className="font-headline text-4xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.05] mb-10">Användarvillkor</h2>
+          <h2 className="font-headline text-3xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.08] md:leading-[1.05] mb-8 md:mb-10">Användarvillkor</h2>
 
           <div className="space-y-8 text-on-surface-variant font-medium leading-relaxed">
             <div>
