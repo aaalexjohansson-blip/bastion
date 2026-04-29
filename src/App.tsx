@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import type { ReactNode } from "react";
+import type { FormEvent, ReactNode } from "react";
 import { motion } from "motion/react";
 import { 
   Zap, 
@@ -413,76 +413,123 @@ const VilkaViArSection = () => (
   </section>
 );
 
-const CTASection = () => (
-  <section id="contact" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 pt-8 md:pt-10 pb-12 md:pb-20">
-    <div className="rounded-[10px] bg-gradient-to-b from-white to-graphite-100 p-6 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-start">
-        <div className="lg:col-span-7 space-y-8 md:space-y-10">
-          <div className="space-y-5 md:space-y-6">
-            <h2 className="text-xs font-bold text-graphite-700 tracking-[0.2em] uppercase">KONTAKT</h2>
-            <h2 className="font-headline text-3xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.08] md:leading-[1.05]">
-              Kontakt och dialog
-            </h2>
-            <p className="text-base md:text-lg text-on-surface-variant max-w-2xl font-medium opacity-90 leading-relaxed">
-              För frågor om Bastions struktur, kapacitet eller samverkan kring samhällskritisk infrastruktur, kontakta oss via e-post.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-8">
-            <div className="flex items-center gap-4 min-w-0 text-on-surface group">
-              <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
-                <Mail size={20} strokeWidth={2.5} />
-              </div>
-              <a className="min-w-0 break-words font-bold hover:text-primary transition-colors" href="mailto:sofia@bastiongroup.se">
-                sofia@bastiongroup.se
-              </a>
+const CTASection = () => {
+  const [email, setEmail] = useState("");
+  const [subscribeStatus, setSubscribeStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubscribe = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubscribeStatus("loading");
+
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to subscribe");
+      }
+
+      setEmail("");
+      setSubscribeStatus("success");
+    } catch {
+      setSubscribeStatus("error");
+    }
+  };
+
+  return (
+    <section id="contact" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 pt-8 md:pt-10 pb-12 md:pb-20">
+      <div className="rounded-[10px] bg-gradient-to-b from-white to-graphite-100 p-6 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-start">
+          <div className="lg:col-span-7 space-y-8 md:space-y-10">
+            <div className="space-y-5 md:space-y-6">
+              <h2 className="text-xs font-bold text-graphite-700 tracking-[0.2em] uppercase">KONTAKT</h2>
+              <h2 className="font-headline text-3xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.08] md:leading-[1.05]">
+                Kontakt och dialog
+              </h2>
+              <p className="text-base md:text-lg text-on-surface-variant max-w-2xl font-medium opacity-90 leading-relaxed">
+                För frågor om Bastions struktur, kapacitet eller samverkan kring samhällskritisk infrastruktur, kontakta oss via e-post.
+              </p>
             </div>
-            <div className="flex items-center gap-4 min-w-0 text-on-surface group">
-              <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
-                <Phone size={20} strokeWidth={2.5} />
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-8">
+              <div className="flex items-center gap-4 min-w-0 text-on-surface group">
+                <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
+                  <Mail size={20} strokeWidth={2.5} />
+                </div>
+                <a className="min-w-0 break-words font-bold hover:text-primary transition-colors" href="mailto:sofia@bastiongroup.se">
+                  sofia@bastiongroup.se
+                </a>
               </div>
-              <a className="font-bold hover:text-primary transition-colors" href="tel:+46737087808">
-                073-708 78 08
-              </a>
+              <div className="flex items-center gap-4 min-w-0 text-on-surface group">
+                <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
+                  <Phone size={20} strokeWidth={2.5} />
+                </div>
+                <a className="font-bold hover:text-primary transition-colors" href="tel:+46737087808">
+                  073-708 78 08
+                </a>
+              </div>
             </div>
-          </div>
-          
-          <div className="pt-6">
-            <motion.a 
-              href="mailto:sofia@bastiongroup.se"
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex w-full sm:w-auto justify-center bg-primary text-on-primary px-8 md:px-12 py-4 md:py-5 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 transition-all shadow-sm shadow-black/10"
-            >
-              KONTAKTA OSS
-            </motion.a>
-          </div>
-        </div>
-        
-        <div className="lg:col-span-5 h-full">
-          <div className="bg-white/85 backdrop-blur-md p-6 md:p-10 rounded-[10px] border border-outline-variant shadow-sm shadow-graphite-900/5 h-full flex flex-col justify-center">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-on-surface mb-4 opacity-60">HÅLL DIG UPPDATERAD</h4>
-            <p className="text-sm font-medium text-on-surface-variant mb-8 leading-relaxed">
-              Anmäl dig för att ta del av uppdateringar om Bastions arbete och utveckling.
-            </p>
-            <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                className="w-full bg-white border border-outline-variant rounded-[10px] px-4 md:px-5 py-4 text-sm focus:ring-2 focus:ring-graphite-200 focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/50 font-medium" 
-                placeholder="Din mailadress" 
-                type="email" 
-              />
-              <button 
-                className="w-full bg-primary text-on-primary px-5 md:px-8 py-4 rounded-[10px] text-[10px] font-black tracking-[0.2em] hover:bg-graphite-900 transition-all uppercase"
-                type="submit"
+            
+            <div className="pt-6">
+              <motion.a 
+                href="mailto:sofia@bastiongroup.se"
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex w-full sm:w-auto justify-center bg-primary text-on-primary px-8 md:px-12 py-4 md:py-5 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 transition-all shadow-sm shadow-black/10"
               >
-                PRENUMERERA
-              </button>
-            </form>
+                KONTAKTA OSS
+              </motion.a>
+            </div>
+          </div>
+          
+          <div className="lg:col-span-5 h-full">
+            <div className="bg-white/85 backdrop-blur-md p-6 md:p-10 rounded-[10px] border border-outline-variant shadow-sm shadow-graphite-900/5 h-full flex flex-col justify-center">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-on-surface mb-4 opacity-60">HÅLL DIG UPPDATERAD</h4>
+              <p className="text-sm font-medium text-on-surface-variant mb-8 leading-relaxed">
+                Anmäl dig för att ta del av uppdateringar om Bastions arbete och utveckling.
+              </p>
+              <form className="space-y-3" onSubmit={handleSubscribe}>
+                <input 
+                  aria-label="Din mailadress"
+                  className="w-full bg-white border border-outline-variant rounded-[10px] px-4 md:px-5 py-4 text-sm focus:ring-2 focus:ring-graphite-200 focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/50 font-medium" 
+                  disabled={subscribeStatus === "loading"}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    setSubscribeStatus("idle");
+                  }}
+                  placeholder="Din mailadress" 
+                  type="email" 
+                  value={email}
+                />
+                <button 
+                  className="w-full bg-primary text-on-primary px-5 md:px-8 py-4 rounded-[10px] text-[10px] font-black tracking-[0.2em] hover:bg-graphite-900 transition-all uppercase disabled:cursor-not-allowed disabled:opacity-70"
+                  disabled={subscribeStatus === "loading"}
+                  type="submit"
+                >
+                  {subscribeStatus === "loading" ? "SKICKAR" : "PRENUMERERA"}
+                </button>
+                {subscribeStatus === "success" && (
+                  <p className="text-sm font-medium text-on-surface-variant" role="status">
+                    Tack! Vi hör av oss.
+                  </p>
+                )}
+                {subscribeStatus === "error" && (
+                  <p className="text-sm font-medium text-on-surface-variant" role="alert">
+                    Något gick fel. Försök igen.
+                  </p>
+                )}
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const Footer = () => (
   <footer className="bg-gradient-to-b from-graphite-800 to-graphite-900 w-full py-12 md:py-16 border-t border-graphite-700 mt-12 md:mt-20">
