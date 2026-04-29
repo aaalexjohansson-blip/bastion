@@ -1,0 +1,642 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
+import { motion } from "motion/react";
+import { 
+  Zap, 
+  Droplet, 
+  Settings, 
+  ShieldCheck, 
+  Mail,
+  Phone
+} from "lucide-react";
+
+const navItems = [
+  { id: "capacity", label: "Kapacitet" },
+  { id: "why-bastion", label: "Varför Bastion" },
+  { id: "vilka-vi-ar", label: "Vilka vi är" },
+];
+
+const activeNavLinkClass = "text-sm font-semibold text-primary border-b-2 border-accent px-4 py-2 transition-colors";
+const inactiveNavLinkClass = "text-sm font-medium text-on-surface border-b-2 border-transparent hover:text-primary transition-colors px-4 py-2 hover:bg-graphite-100 rounded-[10px]";
+
+const SectionHeader = ({ label }: { label: string }) => (
+  <div className="flex items-center gap-4">
+    <h2 className="text-xs font-bold text-primary tracking-[0.2em] uppercase">{label}</h2>
+    <div className="h-px bg-outline-variant flex-grow" />
+  </div>
+);
+
+const heroImage = new URL("./images/image-1.png", import.meta.url).href;
+const whyBastionImage = new URL("./images/image-2.jpg", import.meta.url).href;
+const vilkaViArImage = new URL("./images/image-3.jpg", import.meta.url).href;
+
+const HeroImageIllustration = () => {
+  const imageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let animationFrame = 0;
+
+    const updatePosition = () => {
+      animationFrame = 0;
+
+      if (!imageRef.current || prefersReducedMotion.matches) {
+        return;
+      }
+
+      const offset = Math.max(-40, Math.min(40, window.scrollY * 0.04));
+      imageRef.current.style.transform = `translate3d(0, ${offset}px, 0)`;
+    };
+
+    const handleScroll = () => {
+      if (animationFrame) {
+        return;
+      }
+
+      animationFrame = window.requestAnimationFrame(updatePosition);
+    };
+
+    updatePosition();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+
+      if (animationFrame) {
+        window.cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="hidden lg:block absolute right-[-10vw] top-1/2 z-0 w-[68vw] -translate-y-1/2 pointer-events-none select-none xl:right-[-6vw]">
+      <div ref={imageRef} className="relative w-full will-change-transform">
+        <img className="relative block w-full h-auto object-contain opacity-90" src={heroImage} alt="" aria-hidden="true" />
+      </div>
+    </div>
+  );
+};
+
+const WhyBastionImage = () => {
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let animationFrame = 0;
+
+    const updatePosition = () => {
+      animationFrame = 0;
+
+      if (!imageRef.current || prefersReducedMotion.matches) {
+        return;
+      }
+
+      const offset = Math.max(-50, Math.min(50, window.scrollY * 0.04));
+      imageRef.current.style.transform = `translate3d(0, ${offset}px, 0) scale(1.08)`;
+    };
+
+    const handleScroll = () => {
+      if (animationFrame) {
+        return;
+      }
+
+      animationFrame = window.requestAnimationFrame(updatePosition);
+    };
+
+    updatePosition();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+
+      if (animationFrame) {
+        window.cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, []);
+
+  return (
+    <img
+      ref={imageRef}
+      className="absolute inset-x-0 top-[-10%] h-[120%] w-full object-cover will-change-transform"
+      src={whyBastionImage}
+      alt=""
+      aria-hidden="true"
+    />
+  );
+};
+
+const Navbar = () => {
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const pendingSectionRef = useRef<string | null>(null);
+  const commitTimeoutRef = useRef<number | null>(null);
+  const isLegalPage = window.location.pathname === "/legal";
+
+  useEffect(() => {
+    let frameId: number | null = null;
+
+    const getSections = () =>
+      navItems
+        .map(({ id }) => document.getElementById(id))
+        .filter((section): section is HTMLElement => Boolean(section));
+
+    const commitActiveSection = (sectionId: string | null) => {
+      if (pendingSectionRef.current === sectionId) {
+        return;
+      }
+
+      pendingSectionRef.current = sectionId;
+
+      if (commitTimeoutRef.current !== null) {
+        window.clearTimeout(commitTimeoutRef.current);
+      }
+
+      commitTimeoutRef.current = window.setTimeout(() => {
+        setActiveSection((currentSection) =>
+          currentSection === pendingSectionRef.current ? currentSection : pendingSectionRef.current,
+        );
+        commitTimeoutRef.current = null;
+      }, 125);
+    };
+
+    const updateActiveSection = () => {
+      const sections = getSections();
+
+      if (!sections.length) {
+        return;
+      }
+
+      const activationLine = window.scrollY + 112 - 24;
+      const isAtPageBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+
+      if (isAtPageBottom) {
+        commitActiveSection(sections[sections.length - 1].id);
+        return;
+      }
+
+      const firstSectionTop = sections[0].getBoundingClientRect().top + window.scrollY;
+
+      if (activationLine < firstSectionTop) {
+        commitActiveSection(null);
+        return;
+      }
+
+      const currentSection = sections.reduce<HTMLElement | null>((current, section) => {
+        const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+        return sectionTop <= activationLine ? section : current;
+      }, null);
+
+      commitActiveSection(currentSection?.id ?? null);
+    };
+
+    const handleScroll = () => {
+      if (frameId !== null) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = null;
+        updateActiveSection();
+      });
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+
+    return () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+
+      if (commitTimeoutRef.current !== null) {
+        window.clearTimeout(commitTimeoutRef.current);
+      }
+
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
+
+  return (
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 border-b border-outline-variant backdrop-blur-md">
+      <div className="max-w-[1280px] mx-auto px-8 h-20 grid grid-cols-[auto_1fr_auto] items-center">
+        <a className="flex items-center" href="/">
+          <img className="h-[22px] w-auto" src="/logo-dark.svg" alt="Bastion" />
+        </a>
+        <div className="hidden md:flex items-center justify-center gap-4 text-center">
+          {navItems.map(({ id, label }) => (
+            <a
+              className={activeSection === id ? activeNavLinkClass : inactiveNavLinkClass}
+              href={isLegalPage ? `/#${id}` : `#${id}`}
+              key={id}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
+        <a className="bg-primary text-on-primary px-6 py-2.5 rounded-[10px] font-semibold text-sm hover:bg-graphite-900 active:scale-95 transition-all" href="mailto:sofia@bastiongroup.se">
+          Kontakta oss
+        </a>
+      </div>
+    </nav>
+  );
+};
+
+const Hero = () => (
+  <section id="hero" className="anchor-section w-full relative overflow-hidden bg-transparent py-24 md:py-32">
+    <HeroImageIllustration />
+    <div className="max-w-[1280px] mx-auto px-8 relative z-20 flex flex-col items-start text-left">
+      <motion.span 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="font-medium text-xs tracking-wider text-graphite-700 bg-primary-container px-4 py-1.5 rounded-[10px] mb-6 border border-outline-variant"
+      >
+        SAMORDNAD FÄLTKAPACITET
+      </motion.span>
+      
+      <motion.h1 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="font-headline text-5xl md:text-6xl lg:text-7xl font-semibold text-on-surface mb-6 leading-[1.05] max-w-3xl tracking-tight"
+      >
+        Operativ kapacitet <span className="desktop-break" />för samhällskritisk <span className="desktop-break" />infrastruktur
+      </motion.h1>
+      
+      <motion.p 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="text-2xl md:text-3xl text-on-surface font-semibold max-w-2xl mb-4 leading-[1.12] tracking-normal"
+      >
+        Från spridd kapacitet till organiserad förmåga
+      </motion.p>
+
+      <motion.p 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="text-base md:text-lg text-on-surface-variant max-w-3xl mb-10 leading-relaxed font-medium opacity-90"
+      >
+        Bastion organiserar och samordnar bolag med operativ fältkapacitet för att driva, underhålla och återställa samhällskritisk infrastruktur.
+      </motion.p>
+      
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.3 }}
+        className="flex flex-wrap gap-4"
+      >
+        <a className="bg-primary text-on-primary px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 active:scale-95 transition-all flex items-center gap-2 shadow-sm shadow-black/10" href="#capacity">
+          Läs mer
+        </a>
+        <a className="bg-white border border-outline-variant text-on-surface px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-100 active:scale-95 transition-all" href="#contact">
+          Kontakt
+        </a>
+      </motion.div>
+    </div>
+  </section>
+);
+
+const CapacityCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
+  <motion.div 
+    whileHover={{ y: -5 }}
+    className="group relative min-h-[260px] bg-white border border-outline-variant px-8 pt-8 pb-10 rounded-[10px] hover:border-graphite-200 transition-all overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.04)]"
+  >
+    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+      <div className="w-24 h-24 dot-pattern-dense" />
+    </div>
+    <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center mb-10 text-primary shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+      <Icon size={24} strokeWidth={2.5} fill="currentColor" fillOpacity={0.1} />
+    </div>
+    <h3 className="font-headline text-2xl font-semibold text-on-surface mb-3 leading-[1.1] tracking-tight">{title}</h3>
+    <p className="text-sm leading-relaxed text-graphite-700 font-medium">{description}</p>
+  </motion.div>
+);
+
+const CapacitySection = () => (
+  <section id="capacity" className="anchor-section max-w-[1280px] mx-auto px-8 py-12">
+    <div className="mb-8">
+      <div className="mb-4">
+        <SectionHeader label="Kapacitet" />
+      </div>
+      <p className="text-lg text-on-surface-variant leading-relaxed font-medium">
+        Det handlar om lokal och specialiserad förmåga att driva, underhålla och återställa kritiska system.
+      </p>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <CapacityCard 
+        icon={Zap} 
+        title="Energisystem" 
+        description="Kapacitet att reparera och återställa elnät och energisystem." 
+      />
+      <CapacityCard 
+        icon={Droplet} 
+        title="Vattenförsörjning" 
+        description="Kapacitet att säkra vattenförsörjning och återställa ledningsnät." 
+      />
+      <CapacityCard 
+        icon={Settings} 
+        title="Tekniska system" 
+        description="Kapacitet att återställa tekniska system i fastigheter och industri." 
+      />
+      <CapacityCard 
+        icon={ShieldCheck} 
+        title="Drift och underhåll" 
+        description="Kapacitet att stödja drift och underhåll av kritiska anläggningar." 
+      />
+    </div>
+  </section>
+);
+
+const WhyBastionSection = () => (
+  <section id="why-bastion" className="anchor-section max-w-[1280px] mx-auto px-8 py-20">
+    <div className="mb-12">
+      <SectionHeader label="SAMHÄLLSKRITISK INFRASTRUKTUR" />
+    </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <div className="space-y-10">
+        <h2 className="font-headline text-4xl md:text-5xl font-semibold text-on-surface leading-[1.08] tracking-normal">
+          Varför Bastion behövs
+        </h2>
+        
+        <div className="space-y-6">
+          <p className="text-base text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
+            Samhällskritisk infrastruktur drivs och underhålls av ett stort antal lokala specialistbolag. Kompetensen, resurserna och den operativa förmågan finns redan på plats.
+          </p>
+          <p className="text-base text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
+            Samtidigt är kapaciteten ofta spridd och svår att mobilisera när större störningar uppstår – exempelvis vid stormar, översvämningar, omfattande strömavbrott eller andra händelser som påverkar samhällsviktiga funktioner.
+          </p>
+          <p className="text-base text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
+            Bastion organiserar denna kapacitet i en gemensam struktur. Det möjliggör snabbare mobilisering, bättre samordning och högre uthållighet när samhällets viktigaste system påverkas.
+          </p>
+        </div>
+      </div>
+      
+      <div className="relative aspect-square w-full rounded-[10px] overflow-hidden shadow-[0_20px_50px_rgba(31,28,26,0.12)]">
+        <WhyBastionImage />
+      </div>
+    </div>
+  </section>
+);
+
+const VilkaViArSection = () => (
+  <section id="vilka-vi-ar" className="anchor-section max-w-[1280px] mx-auto px-8 pt-20 pb-10">
+    <div className="rounded-[10px] bg-[#2E2A27] p-12 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <div className="lg:col-span-5">
+          <div className="relative aspect-[4/3] w-full rounded-[10px] border border-outline-variant bg-gradient-to-b from-white to-graphite-100 overflow-hidden">
+            <img className="h-full w-full object-cover brightness-90 contrast-95" src={vilkaViArImage} alt="" aria-hidden="true" />
+          </div>
+        </div>
+        <div className="lg:col-span-7 space-y-6">
+          <h2 className="text-xs font-bold text-[#CFC8BE] tracking-[0.2em] uppercase">OM BASTION</h2>
+          <h3 className="font-headline text-4xl md:text-6xl font-semibold text-white tracking-normal leading-[1.05]">
+            Vilka vi är
+          </h3>
+          <p className="text-lg text-[#EAE7E2] max-w-2xl font-medium opacity-90 leading-relaxed">
+            Bastion är initierat av personer med bakgrund inom energi, fastigheter, industri, säkerhet och beredskap.
+          </p>
+          <p className="text-lg text-[#EAE7E2] max-w-2xl font-medium opacity-90 leading-relaxed">
+            Vi har lång operativ erfarenhet av arbete nära samhällskritisk infrastruktur och entreprenörsdrivna bolag.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const CTASection = () => (
+  <section id="contact" className="anchor-section max-w-[1280px] mx-auto px-8 pt-10 pb-20">
+    <div className="rounded-[10px] bg-gradient-to-b from-white to-graphite-100 p-12 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        <div className="lg:col-span-7 space-y-10">
+          <div className="space-y-6">
+            <h2 className="text-xs font-bold text-graphite-700 tracking-[0.2em] uppercase">KONTAKT</h2>
+            <h2 className="font-headline text-4xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.05]">
+              Kontakt och dialog
+            </h2>
+            <p className="text-lg text-on-surface-variant max-w-2xl font-medium opacity-90 leading-relaxed">
+              För frågor om Bastions struktur, kapacitet eller samverkan kring samhällskritisk infrastruktur, kontakta oss via e-post.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div className="flex items-center gap-4 text-on-surface group">
+              <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
+                <Mail size={20} strokeWidth={2.5} />
+              </div>
+              <a className="font-bold hover:text-primary transition-colors" href="mailto:sofia@bastiongroup.se">
+                sofia@bastiongroup.se
+              </a>
+            </div>
+            <div className="flex items-center gap-4 text-on-surface group">
+              <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
+                <Phone size={20} strokeWidth={2.5} />
+              </div>
+              <a className="font-bold hover:text-primary transition-colors" href="tel:+46737087808">
+                073-708 78 08
+              </a>
+            </div>
+          </div>
+          
+          <div className="pt-6">
+            <motion.a 
+              href="mailto:sofia@bastiongroup.se"
+              whileTap={{ scale: 0.95 }}
+              className="bg-primary text-on-primary px-12 py-5 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 transition-all shadow-sm shadow-black/10"
+            >
+              KONTAKTA OSS
+            </motion.a>
+          </div>
+        </div>
+        
+        <div className="lg:col-span-5 h-full">
+          <div className="bg-white/85 backdrop-blur-md p-10 rounded-[10px] border border-outline-variant shadow-sm shadow-graphite-900/5 h-full flex flex-col justify-center">
+            <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-on-surface mb-4 opacity-60">HÅLL DIG UPPDATERAD</h4>
+            <p className="text-sm font-medium text-on-surface-variant mb-8 leading-relaxed">
+              Anmäl dig för att ta del av uppdateringar om Bastions arbete och utveckling.
+            </p>
+            <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
+              <input 
+                className="w-full bg-white border border-outline-variant rounded-[10px] px-5 py-4 text-sm focus:ring-2 focus:ring-graphite-200 focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/50 font-medium" 
+                placeholder="Din mailadress" 
+                type="email" 
+              />
+              <button 
+                className="w-full bg-primary text-on-primary px-8 py-4 rounded-[10px] text-[10px] font-black tracking-[0.2em] hover:bg-graphite-900 transition-all uppercase"
+                type="submit"
+              >
+                PRENUMERERA
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const Footer = () => (
+  <footer className="bg-gradient-to-b from-graphite-800 to-graphite-900 w-full py-16 border-t border-graphite-700 mt-20">
+    <div className="max-w-[1280px] mx-auto px-8">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-12 md:gap-16 items-start">
+        <div>
+          <img className="h-7 w-auto" src="/logo-light.svg" alt="Bastion" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5 md:justify-items-end">
+          <a className="text-[10px] font-black uppercase tracking-[0.2em] text-on-primary/70 hover:text-on-primary transition-colors" href="/legal#integritet">Integritetspolicy</a>
+          <a className="text-[10px] font-black uppercase tracking-[0.2em] text-on-primary/70 hover:text-on-primary transition-colors" href="/legal#villkor">Användarvillkor</a>
+        </div>
+        <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-primary/60 md:col-span-2 border-t border-on-primary/10 pt-8">
+          © 2026 Bastion. Operativ kapacitet för samhällskritisk infrastruktur.
+        </div>
+      </div>
+    </div>
+  </footer>
+);
+
+const LegalSection = ({ children, id }: { children: ReactNode, id: string }) => (
+  <section id={id} className="anchor-section bg-white border border-outline-variant rounded-[10px] p-8 md:p-12 shadow-sm shadow-graphite-900/5">
+    {children}
+  </section>
+);
+
+const LegalPage = () => (
+  <main className="relative z-10 pt-32 pb-20">
+    <div className="max-w-[960px] mx-auto px-8">
+      <nav className="mb-10 flex flex-wrap gap-4" aria-label="Juridisk navigation">
+        <a className="text-sm font-semibold text-primary border border-outline-variant rounded-[10px] px-4 py-2 hover:bg-graphite-100 transition-colors" href="#integritet">Integritetspolicy</a>
+        <a className="text-sm font-semibold text-primary border border-outline-variant rounded-[10px] px-4 py-2 hover:bg-graphite-100 transition-colors" href="#villkor">Användarvillkor</a>
+      </nav>
+
+      <div className="space-y-12">
+        <LegalSection id="integritet">
+          <h1 className="font-headline text-4xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.05] mb-10">Integritetspolicy</h1>
+
+          <div className="space-y-8 text-on-surface-variant font-medium leading-relaxed">
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">1. Allmänt</h3>
+              <p>Bastion värnar om din personliga integritet. Denna policy beskriver hur vi samlar in och använder personuppgifter i samband med användning av vår webbplats.</p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">2. Vilka uppgifter vi samlar in</h3>
+              <p>Vi samlar endast in personuppgifter som du själv lämnar till oss, exempelvis:</p>
+              <ul className="mt-3 list-disc space-y-2 pl-6">
+                <li>E-postadress via formulär för kontakt eller uppdateringar</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">3. Syfte med behandlingen</h3>
+              <p>Vi behandlar dina uppgifter för att:</p>
+              <ul className="mt-3 list-disc space-y-2 pl-6">
+                <li>Kunna kontakta dig vid förfrågningar</li>
+                <li>Skicka relevant information om Bastions verksamhet</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">4. Lagring av uppgifter</h3>
+              <p>Vi sparar dina uppgifter endast så länge det är nödvändigt för ändamålet eller tills du begär att bli borttagen.</p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">5. Tredjepartstjänster</h3>
+              <p>Vi kan använda tredjepartstjänster för drift av webbplatsen och utskick av e-post. Dessa behandlar endast uppgifter enligt våra instruktioner.</p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">6. Dina rättigheter</h3>
+              <p>Du har rätt att:</p>
+              <ul className="mt-3 list-disc space-y-2 pl-6">
+                <li>Begära tillgång till dina uppgifter</li>
+                <li>Begära rättelse eller radering</li>
+                <li>Invända mot behandling</li>
+              </ul>
+              <p className="mt-4">Kontakta oss via e-post om du vill utöva dina rättigheter.</p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">7. Kontakt</h3>
+              <p>sofia@bastiongroup.se</p>
+            </div>
+          </div>
+        </LegalSection>
+
+        <LegalSection id="villkor">
+          <h2 className="font-headline text-4xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.05] mb-10">Användarvillkor</h2>
+
+          <div className="space-y-8 text-on-surface-variant font-medium leading-relaxed">
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">1. Allmänt</h3>
+              <p>Genom att använda denna webbplats godkänner du dessa villkor.</p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">2. Innehåll</h3>
+              <p>Allt innehåll på webbplatsen tillhandahålls i informationssyfte. Bastion strävar efter att informationen är korrekt men lämnar inga garantier för fullständighet eller aktualitet.</p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">3. Ansvar</h3>
+              <p>Bastion ansvarar inte för:</p>
+              <ul className="mt-3 list-disc space-y-2 pl-6">
+                <li>Skador som uppstår genom användning av webbplatsen</li>
+                <li>Eventuella tekniska avbrott eller fel</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">4. Immateriella rättigheter</h3>
+              <p>Innehåll, design och material på webbplatsen tillhör Bastion och får inte användas utan tillstånd.</p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">5. Ändringar</h3>
+              <p>Vi förbehåller oss rätten att uppdatera dessa villkor utan föregående meddelande.</p>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-on-surface mb-3">6. Tillämplig lag</h3>
+              <p>Dessa villkor regleras av svensk lag.</p>
+            </div>
+          </div>
+        </LegalSection>
+      </div>
+    </div>
+  </main>
+);
+
+export default function App() {
+  const isLegalPage = window.location.pathname === "/legal";
+
+  return (
+    <div className="min-h-screen bg-background text-on-background antialiased selection:bg-accent/20">
+      <div className="fixed inset-0 dot-pattern opacity-35 pointer-events-none z-0" />
+      <Navbar />
+      {isLegalPage ? (
+        <LegalPage />
+      ) : (
+        <main className="relative z-10 pt-20">
+          <Hero />
+          <CapacitySection />
+          <WhyBastionSection />
+          <VilkaViArSection />
+          <CTASection />
+        </main>
+      )}
+      <div className="relative z-10">
+        <Footer />
+      </div>
+    </div>
+  );
+}
