@@ -32,7 +32,7 @@ const SectionHeader = ({ label }: { label: string }) => (
 );
 
 const heroImage = new URL("./images/image-1.png", import.meta.url).href;
-const whyBastionImage = new URL("./images/image-2.jpg", import.meta.url).href;
+const whyBastionImage = new URL("./images/image-2.png", import.meta.url).href;
 const vilkaViArImage = new URL("./images/image-3.jpg", import.meta.url).href;
 
 const HeroImageIllustration = () => {
@@ -74,7 +74,7 @@ const HeroImageIllustration = () => {
   }, []);
 
   return (
-    <div className="hidden lg:block absolute right-[-10vw] top-1/2 z-0 w-[68vw] -translate-y-1/2 pointer-events-none select-none xl:right-[-6vw]">
+    <div className="hidden lg:block absolute right-[-12vw] top-[calc(50%-56px)] z-0 w-[76vw] -translate-y-1/2 pointer-events-none select-none xl:right-[-8vw]">
       <div ref={imageRef} className="relative w-full will-change-transform">
         <img className="relative block w-full h-auto object-contain opacity-90" src={heroImage} alt="" aria-hidden="true" />
       </div>
@@ -97,7 +97,7 @@ const WhyBastionImage = () => {
       }
 
       const offset = Math.max(-50, Math.min(50, window.scrollY * 0.04));
-      imageRef.current.style.transform = `translate3d(0, ${offset}px, 0) scale(1.08)`;
+      imageRef.current.style.transform = `translate3d(0, ${offset}px, 0) scale(1.16)`;
     };
 
     const handleScroll = () => {
@@ -123,7 +123,7 @@ const WhyBastionImage = () => {
   return (
     <img
       ref={imageRef}
-      className="absolute inset-x-0 top-[-10%] h-[120%] w-full object-cover will-change-transform"
+      className="relative block h-full w-full object-contain will-change-transform scale-110 md:scale-[1.16]"
       src={whyBastionImage}
       alt=""
       aria-hidden="true"
@@ -361,17 +361,17 @@ const CapacitySection = () => (
 );
 
 const WhyBastionSection = () => (
-  <section id="why-bastion" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-12 md:py-20">
-    <div className="mb-8 md:mb-12">
+  <section id="why-bastion" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-16">
+    <div className="mb-6 md:mb-9">
       <SectionHeader label="SAMHÄLLSKRITISK INFRASTRUKTUR" />
     </div>
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
-      <div className="space-y-7 md:space-y-10">
+    <div className="grid grid-cols-1 lg:grid-cols-[0.92fr_1.08fr] gap-8 lg:gap-16 items-center">
+      <div className="space-y-5 md:space-y-7">
         <h2 className="font-headline text-3xl md:text-5xl font-semibold text-on-surface leading-[1.08] tracking-normal">
           Varför Bastion behövs
         </h2>
         
-        <div className="space-y-6">
+        <div className="space-y-5">
           <p className="text-base text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
             Samhällskritisk infrastruktur drivs och underhålls av ett stort antal lokala specialistbolag. Kompetensen, resurserna och den operativa förmågan finns redan på plats.
           </p>
@@ -384,7 +384,7 @@ const WhyBastionSection = () => (
         </div>
       </div>
       
-      <div className="relative aspect-square w-full rounded-[10px] overflow-hidden shadow-[0_20px_50px_rgba(31,28,26,0.12)]">
+      <div className="relative aspect-square w-full pointer-events-none select-none">
         <WhyBastionImage />
       </div>
     </div>
