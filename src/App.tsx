@@ -21,13 +21,13 @@ const navItems = [
   { id: "vilka-vi-ar", label: "Vilka vi är" },
 ];
 
-const activeNavLinkClass = "text-sm font-semibold text-primary border-b-2 border-accent px-4 py-2 transition-colors";
+const activeNavLinkClass = "text-sm font-semibold text-[#B94A1E] border-b-2 border-[#B94A1E] px-4 py-2 transition-colors";
 const inactiveNavLinkClass = "text-sm font-medium text-on-surface border-b-2 border-transparent hover:text-primary transition-colors px-4 py-2 hover:bg-graphite-100 rounded-[10px]";
 
 const SectionHeader = ({ label }: { label: string }) => (
   <div className="flex items-center gap-4">
-    <h2 className="text-xs font-bold text-primary tracking-[0.2em] uppercase">{label}</h2>
-    <div className="h-px bg-outline-variant flex-grow" />
+    <h2 className="text-xs font-bold text-[#B94A1E] tracking-[0.2em] uppercase">{label}</h2>
+    <div className="h-px bg-[#B94A1E]/65 flex-grow" />
   </div>
 );
 
@@ -241,7 +241,7 @@ const Navbar = () => {
             </a>
           ))}
         </div>
-        <a className="hidden md:inline-flex bg-primary text-on-primary px-6 py-2.5 rounded-[10px] font-semibold text-sm whitespace-nowrap hover:bg-graphite-900 active:scale-95 transition-all" href="mailto:sofia@bastiongroup.se">
+        <a className="hidden md:inline-flex bg-[#2F5D62] text-white px-6 py-2.5 rounded-[10px] font-semibold text-sm whitespace-nowrap hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all" href="mailto:sofia@bastiongroup.se">
           Kontakta oss
         </a>
       </div>
@@ -256,7 +256,7 @@ const Hero = () => (
       <motion.span 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="font-medium text-[10px] md:text-xs tracking-wider text-graphite-700 bg-primary-container px-3 md:px-4 py-1.5 rounded-[10px] mb-5 md:mb-6 border border-outline-variant"
+        className="font-medium text-[10px] md:text-xs tracking-wider text-primary bg-primary-container px-3 md:px-4 py-1.5 rounded-[10px] mb-5 md:mb-6 border border-outline-variant"
       >
         SAMORDNAD FÄLTKAPACITET
       </motion.span>
@@ -294,10 +294,10 @@ const Hero = () => (
         transition={{ delay: 0.3 }}
         className="grid w-full grid-cols-1 gap-3 sm:flex sm:w-auto sm:flex-wrap sm:gap-4"
       >
-        <a className="hidden sm:flex bg-primary text-on-primary px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 active:scale-95 transition-all items-center justify-center gap-2 shadow-sm shadow-black/10" href="#capacity">
+        <a className="hidden sm:flex bg-[#2F5D62] text-white px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all items-center justify-center gap-2 shadow-sm shadow-black/10" href="#capacity">
           Läs mer
         </a>
-        <a className="w-full sm:w-auto bg-primary sm:bg-white border border-primary sm:border-outline-variant text-on-primary sm:text-on-surface px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest text-center hover:bg-graphite-900 sm:hover:bg-graphite-100 active:scale-95 transition-all" href="#contact">
+        <a className="w-full sm:w-auto bg-[#2F5D62] sm:bg-white border border-[#2F5D62] sm:border-outline-variant text-white sm:text-on-surface px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest text-center hover:bg-[#274D51] sm:hover:bg-graphite-100 active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all" href="#contact">
           Kontakt
         </a>
       </motion.div>
@@ -305,7 +305,7 @@ const Hero = () => (
   </section>
 );
 
-const CapacityCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
+const CapacityCard = ({ icon: Icon, iconFill, title, description }: { icon: any, iconFill: string, title: string, description: string }) => (
   <motion.div 
     whileHover={{ y: -5 }}
     className="group relative min-h-[220px] md:min-h-[260px] bg-white border border-outline-variant px-6 md:px-8 pt-6 md:pt-8 pb-7 md:pb-10 rounded-[10px] hover:border-graphite-200 transition-all overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.04)]"
@@ -313,8 +313,8 @@ const CapacityCard = ({ icon: Icon, title, description }: { icon: any, title: st
     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
       <div className="w-24 h-24 dot-pattern-dense" />
     </div>
-    <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center mb-7 md:mb-10 text-primary shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
-      <Icon size={24} strokeWidth={2.5} fill="currentColor" fillOpacity={0.1} />
+    <div className="w-12 h-12 rounded-full bg-surface flex items-center justify-center mb-7 md:mb-10 text-on-surface shadow-[0_4px_12px_rgba(0,0,0,0.05)]">
+      <Icon color="#1F1C1A" size={24} strokeWidth={2.5} fill={iconFill} fillOpacity={0.8} />
     </div>
     <h3 className="font-headline text-2xl font-semibold text-on-surface mb-3 leading-[1.1] tracking-tight">{title}</h3>
     <p className="text-sm leading-relaxed text-graphite-700 font-medium">{description}</p>
@@ -334,21 +334,25 @@ const CapacitySection = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <CapacityCard 
         icon={Zap} 
+        iconFill="#E7CFC4"
         title="Energisystem" 
         description="Kapacitet att reparera och återställa elnät och energisystem." 
       />
       <CapacityCard 
         icon={Droplet} 
+        iconFill="#D6E3E3"
         title="Vattenförsörjning" 
         description="Kapacitet att säkra vattenförsörjning och återställa ledningsnät." 
       />
       <CapacityCard 
         icon={Settings} 
+        iconFill="#E3DFDA"
         title="Tekniska system" 
         description="Kapacitet att återställa tekniska system i fastigheter och industri." 
       />
       <CapacityCard 
         icon={ShieldCheck} 
+        iconFill="#E2D6C8"
         title="Drift och underhåll" 
         description="Kapacitet att stödja drift och underhåll av kritiska anläggningar." 
       />
@@ -389,7 +393,7 @@ const WhyBastionSection = () => (
 
 const VilkaViArSection = () => (
   <section id="vilka-vi-ar" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 pt-12 md:pt-20 pb-8 md:pb-10">
-    <div className="rounded-[10px] bg-[#2E2A27] p-6 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
+    <div className="rounded-[10px] bg-[#2B2623] p-6 md:p-20 border border-outline-variant shadow-sm shadow-graphite-900/5">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 items-center">
         <div className="lg:col-span-5">
           <div className="relative aspect-[4/3] w-full rounded-[10px] border border-outline-variant bg-gradient-to-b from-white to-graphite-100 overflow-hidden">
@@ -397,14 +401,14 @@ const VilkaViArSection = () => (
           </div>
         </div>
         <div className="lg:col-span-7 space-y-5 md:space-y-6">
-          <h2 className="text-xs font-bold text-[#CFC8BE] tracking-[0.2em] uppercase">OM BASTION</h2>
+          <h2 className="text-xs font-bold text-[#D36A3C] tracking-[0.2em] uppercase">OM BASTION</h2>
           <h3 className="font-headline text-3xl md:text-6xl font-semibold text-white tracking-normal leading-[1.08] md:leading-[1.05]">
             Vilka vi är
           </h3>
-          <p className="text-base md:text-lg text-[#EAE7E2] max-w-2xl font-medium opacity-90 leading-relaxed">
+          <p className="text-base md:text-lg text-[#E5DED6] max-w-2xl font-medium opacity-90 leading-relaxed">
             Bastion är initierat av personer med bakgrund inom energi, fastigheter, industri, säkerhet och beredskap.
           </p>
-          <p className="text-base md:text-lg text-[#EAE7E2] max-w-2xl font-medium opacity-90 leading-relaxed">
+          <p className="text-base md:text-lg text-[#E5DED6] max-w-2xl font-medium opacity-90 leading-relaxed">
             Vi har lång operativ erfarenhet av arbete nära samhällskritisk infrastruktur och entreprenörsdrivna bolag.
           </p>
         </div>
@@ -447,18 +451,18 @@ const CTASection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-start">
           <div className="lg:col-span-7 space-y-8 md:space-y-10">
             <div className="space-y-5 md:space-y-6">
-              <h2 className="text-xs font-bold text-graphite-700 tracking-[0.2em] uppercase">KONTAKT</h2>
+              <h2 className="text-xs font-bold text-[#B94A1E] tracking-[0.2em] uppercase">KONTAKT</h2>
               <h2 className="font-headline text-3xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.08] md:leading-[1.05]">
                 Kontakt och dialog
               </h2>
               <p className="text-base md:text-lg text-on-surface-variant max-w-2xl font-medium opacity-90 leading-relaxed">
-                För frågor om Bastions struktur, kapacitet eller samverkan kring samhällskritisk infrastruktur, kontakta oss via e-post.
+                För frågor om Bastions struktur, kapacitet eller samverkan kring samhällskritisk infrastruktur, kontakta oss.
               </p>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-8">
               <div className="flex items-center gap-4 min-w-0 text-on-surface group">
-                <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
+                <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-on-surface">
                   <Mail size={20} strokeWidth={2.5} />
                 </div>
                 <a className="min-w-0 break-words font-bold hover:text-primary transition-colors" href="mailto:sofia@bastiongroup.se">
@@ -466,7 +470,7 @@ const CTASection = () => {
                 </a>
               </div>
               <div className="flex items-center gap-4 min-w-0 text-on-surface group">
-                <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-primary">
+                <div className="w-11 h-11 shrink-0 rounded-full bg-surface flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] text-on-surface">
                   <Phone size={20} strokeWidth={2.5} />
                 </div>
                 <a className="font-bold hover:text-primary transition-colors" href="tel:+46737087808">
@@ -479,7 +483,7 @@ const CTASection = () => {
               <motion.a 
                 href="mailto:sofia@bastiongroup.se"
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex w-full sm:w-auto justify-center bg-primary text-on-primary px-8 md:px-12 py-4 md:py-5 rounded-[10px] font-bold text-sm tracking-widest hover:bg-graphite-900 transition-all shadow-sm shadow-black/10"
+                className="inline-flex w-full sm:w-auto justify-center bg-[#2F5D62] text-white px-8 md:px-12 py-4 md:py-5 rounded-[10px] font-bold text-sm tracking-widest hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 transition-all shadow-sm shadow-black/10"
               >
                 KONTAKTA OSS
               </motion.a>
@@ -506,7 +510,7 @@ const CTASection = () => {
                   value={email}
                 />
                 <button 
-                  className="w-full bg-primary text-on-primary px-5 md:px-8 py-4 rounded-[10px] text-[10px] font-black tracking-[0.2em] hover:bg-graphite-900 transition-all uppercase disabled:cursor-not-allowed disabled:opacity-70"
+                  className="w-full bg-[#2F5D62] text-white px-5 md:px-8 py-4 rounded-[10px] text-[10px] font-black tracking-[0.2em] hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 transition-all uppercase disabled:cursor-not-allowed disabled:opacity-70"
                   disabled={subscribeStatus === "loading"}
                   type="submit"
                 >
@@ -668,7 +672,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background text-on-background antialiased selection:bg-accent/20">
-      <div className="fixed inset-0 dot-pattern opacity-35 pointer-events-none z-0" />
+      <div className="fixed inset-0 dot-pattern opacity-40 pointer-events-none z-0" />
       <Navbar />
       {isLegalPage ? (
         <LegalPage />

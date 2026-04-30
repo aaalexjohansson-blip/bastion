@@ -5,33 +5,33 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-headline: "Inter", ui-sans-serif, system-ui, sans-serif;
   
-  --color-primary: #2E2A27;
+  --color-primary: #2F5D62;
   --color-on-primary: #FFFFFF;
-  --color-primary-container: #E7E3DC;
-  --color-on-primary-container: #222222;
+  --color-primary-container: #ECE6DD;
+  --color-on-primary-container: #1F1C1A;
   
-  --color-background: #F4F1EC;
-  --color-on-background: #222222;
+  --color-background: #F4F0EA;
+  --color-on-background: #1F1C1A;
   
-  --color-surface: #E7E3DC;
-  --color-on-surface: #222222;
-  --color-on-surface-variant: #6B645E;
+  --color-surface: #ECE6DD;
+  --color-on-surface: #1F1C1A;
+  --color-on-surface-variant: #6F6861;
   
-  --color-outline-variant: #E5E0D8;
-  --color-soft-neutral: #F2EEE8;
-  --color-soft-blue: #BFB7AC;
-  --color-muted-cyan: #CFC8BE;
-  --color-teal: #BFB7AC;
-  --color-purple: #CFC8BE;
-  --color-coral: #E7E3DC;
-  --color-blue-grey: #CFC8BE;
-  --color-accent: #2E2A27;
+  --color-outline-variant: #DED6CC;
+  --color-soft-neutral: #ECE6DD;
+  --color-soft-blue: #DED6CC;
+  --color-muted-cyan: #E7DED3;
+  --color-teal: #DED6CC;
+  --color-purple: #DED6CC;
+  --color-coral: #ECE6DD;
+  --color-blue-grey: #DED6CC;
+  --color-accent: #B94A1E;
   --color-graphite-900: #1F1C1A;
-  --color-graphite-800: #2E2A27;
-  --color-graphite-700: #4A4541;
-  --color-graphite-card: #3A3532;
-  --color-graphite-200: #CFC8BE;
-  --color-graphite-100: #F2EEE8;
+  --color-graphite-800: #2B2623;
+  --color-graphite-700: #6F6861;
+  --color-graphite-card: #2B2623;
+  --color-graphite-200: #CFC5BA;
+  --color-graphite-100: #F4F0EA;
   
   --radius-xl: 1.5rem;
 }
