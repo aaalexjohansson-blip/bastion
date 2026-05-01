@@ -12,7 +12,8 @@ import {
   Settings, 
   ShieldCheck, 
   Mail,
-  Phone
+  Phone,
+  Download
 } from "lucide-react";
 
 const navItems = [
@@ -34,6 +35,72 @@ const SectionHeader = ({ label }: { label: string }) => (
 const heroImage = new URL("./images/image-1.png", import.meta.url).href;
 const whyBastionImage = new URL("./images/image-2.png", import.meta.url).href;
 const vilkaViArImage = new URL("./images/image-3.jpg", import.meta.url).href;
+
+const logoAssets = [
+  { filename: "logo-dark.svg", label: "Mörk logotyp", previewClass: "bg-white" },
+  { filename: "logo-light.svg", label: "Ljus logotyp", previewClass: "bg-graphite-900" },
+  { filename: "favicon.svg", label: "Favicon", previewClass: "bg-white" },
+];
+
+const designColors = [
+  { name: "Warm background", hex: "#F4F0EA" },
+  { name: "Surface", hex: "#ECE6DD" },
+  { name: "Subtle surface", hex: "#F4F0EA" },
+  { name: "Primary text", hex: "#1F1C1A" },
+  { name: "Secondary text", hex: "#6F6861" },
+  { name: "Muted text", hex: "#CFC5BA" },
+  { name: "Petrol", hex: "#2F5D62" },
+  { name: "Petrol hover", hex: "#274D51" },
+  { name: "Petrol active", hex: "#203F42" },
+  { name: "Rust orange", hex: "#B94A1E" },
+  { name: "Neutral border", hex: "#DED6CC" },
+  { name: "Divider", hex: "#DED6CC" },
+  { name: "Dark surface", hex: "#2B2623" },
+  { name: "Footer dark", hex: "#1F1C1A" },
+  { name: "Light text", hex: "#FFFFFF" },
+];
+
+const typographySamples = [
+  {
+    name: "Inter",
+    usage: "Main heading",
+    sample: "Operativ kapacitet",
+    className: "font-headline text-4xl md:text-6xl font-semibold leading-[1.05] tracking-normal",
+  },
+  {
+    name: "Inter",
+    usage: "Section heading",
+    sample: "Varför Bastion behövs",
+    className: "font-headline text-3xl md:text-5xl font-semibold leading-[1.08] tracking-normal",
+  },
+  {
+    name: "Inter",
+    usage: "Body text",
+    sample: "Bastion organiserar och samordnar bolag med operativ fältkapacitet.",
+    className: "text-base md:text-lg font-medium leading-relaxed text-on-surface-variant",
+  },
+  {
+    name: "Inter",
+    usage: "Small uppercase label",
+    sample: "SAMORDNAD FÄLTKAPACITET",
+    className: "text-xs font-bold tracking-[0.2em] uppercase text-accent",
+  },
+  {
+    name: "Inter",
+    usage: "Button text",
+    sample: "KONTAKTA OSS",
+    className: "text-sm font-bold tracking-widest uppercase text-on-surface",
+  },
+];
+
+const hexToRgb = (hex: string) => {
+  const normalizedHex = hex.replace("#", "");
+  const red = parseInt(normalizedHex.slice(0, 2), 16);
+  const green = parseInt(normalizedHex.slice(2, 4), 16);
+  const blue = parseInt(normalizedHex.slice(4, 6), 16);
+
+  return `rgb(${red}, ${green}, ${blue})`;
+};
 
 const HeroImageIllustration = () => {
   const imageRef = useRef<HTMLDivElement>(null);
@@ -135,7 +202,7 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const pendingSectionRef = useRef<string | null>(null);
   const commitTimeoutRef = useRef<number | null>(null);
-  const isLegalPage = window.location.pathname === "/legal";
+  const isHomePage = window.location.pathname === "/";
 
   useEffect(() => {
     let frameId: number | null = null;
@@ -234,7 +301,7 @@ const Navbar = () => {
           {navItems.map(({ id, label }) => (
             <a
               className={activeSection === id ? activeNavLinkClass : inactiveNavLinkClass}
-              href={isLegalPage ? `/#${id}` : `#${id}`}
+              href={isHomePage ? `#${id}` : `/#${id}`}
               key={id}
             >
               {label}
@@ -667,14 +734,106 @@ const LegalPage = () => (
   </main>
 );
 
+const DesignSection = ({ children, title }: { children: ReactNode, title: string }) => (
+  <section className="bg-white border border-outline-variant rounded-[10px] p-5 md:p-8 shadow-sm shadow-graphite-900/5">
+    <h2 className="font-headline text-2xl md:text-3xl font-semibold text-on-surface tracking-normal mb-6">{title}</h2>
+    {children}
+  </section>
+);
+
+const DesignPage = () => (
+  <main className="relative z-10 pt-24 md:pt-32 pb-12 md:pb-20">
+    <div className="max-w-[1120px] mx-auto px-5 md:px-8">
+      <div className="mb-10 md:mb-14 max-w-3xl">
+        <h1 className="font-headline text-4xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.05] mb-5">
+          Designresurser
+        </h1>
+        <p className="text-base md:text-lg text-on-surface-variant font-medium leading-relaxed">
+          Här finns Bastions logotyper, färger och typografi samlade för nedladdning och användning.
+        </p>
+      </div>
+
+      <div className="space-y-8 md:space-y-10">
+        <DesignSection title="Logotyper">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+            {logoAssets.map(({ filename, label, previewClass }) => (
+              <article className="border border-outline-variant rounded-[10px] overflow-hidden bg-graphite-100" key={filename}>
+                <div className={`h-40 flex items-center justify-center p-8 ${previewClass}`}>
+                  <img
+                    className={filename === "favicon.svg" ? "h-16 w-16" : "max-h-16 w-full object-contain"}
+                    src={`/${filename}`}
+                    alt={label}
+                  />
+                </div>
+                <div className="p-4 md:p-5 bg-white border-t border-outline-variant">
+                  <p className="font-semibold text-on-surface mb-4">{filename}</p>
+                  <a
+                    className="inline-flex items-center gap-2 rounded-[10px] bg-[#2F5D62] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2"
+                    download
+                    href={`/${filename}`}
+                  >
+                    <Download size={16} strokeWidth={2.5} />
+                    Ladda ner
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </DesignSection>
+
+        <DesignSection title="Färger">
+          <div className="divide-y divide-outline-variant border border-outline-variant rounded-[10px] overflow-hidden">
+            {designColors.map(({ name, hex }) => (
+              <div className="grid grid-cols-[56px_1fr] md:grid-cols-[72px_1fr_140px_180px] gap-4 items-center bg-white p-4" key={name}>
+                <div
+                  aria-label={`${name} ${hex}`}
+                  className="h-11 w-11 rounded-[10px] border border-outline-variant shadow-sm"
+                  style={{ backgroundColor: hex }}
+                />
+                <p className="font-semibold text-on-surface">{name}</p>
+                <p className="font-mono text-sm text-on-surface-variant">{hex}</p>
+                <p className="font-mono text-sm text-on-surface-variant">{hexToRgb(hex)}</p>
+              </div>
+            ))}
+          </div>
+        </DesignSection>
+
+        <DesignSection title="Typografi">
+          <div className="mb-6 rounded-[10px] border border-outline-variant bg-graphite-100 p-4 text-sm font-medium leading-relaxed text-on-surface-variant">
+            Webbplatsen använder Inter via Google Fonts. Det finns inga lokala fontfiler i projektet, så inga fontnedladdningar visas här. Hämta fonten från den officiella källan:
+            {" "}
+            <a className="font-semibold text-primary underline underline-offset-4" href="https://fonts.google.com/specimen/Inter" rel="noreferrer" target="_blank">
+              Google Fonts
+            </a>.
+          </div>
+          <div className="space-y-4">
+            {typographySamples.map(({ name, usage, sample, className }) => (
+              <article className="border border-outline-variant rounded-[10px] bg-white p-4 md:p-6" key={usage}>
+                <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                  <p className="font-semibold text-on-surface">{name}</p>
+                  <p className="text-sm font-medium text-on-surface-variant">{usage}</p>
+                </div>
+                <p className={className}>{sample}</p>
+              </article>
+            ))}
+          </div>
+        </DesignSection>
+      </div>
+    </div>
+  </main>
+);
+
 export default function App() {
   const isLegalPage = window.location.pathname === "/legal";
+  const isDesignPage = window.location.pathname === "/design";
 
   return (
     <div className="min-h-screen bg-background text-on-background antialiased selection:bg-accent/20">
       <div className="fixed inset-0 dot-pattern opacity-40 pointer-events-none z-0" />
       <Navbar />
-      {isLegalPage ? (
+      {isDesignPage ? (
+        <DesignPage />
+      ) : isLegalPage ? (
         <LegalPage />
       ) : (
         <main className="relative z-10 pt-20">
