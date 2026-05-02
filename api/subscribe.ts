@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
-      from: 'Bastion <onboarding@resend.dev>',
+      from: 'Bastion <noreply@bastiongroup.se>',
       to: 'sofia@bastiongroup.se',
       subject: 'Ny intresseanmälan från Bastion.se',
       text: `En person har anmält intresse för att få veta mer om Bastion framöver.\n\nIfylld e-postadress: ${email}`,
