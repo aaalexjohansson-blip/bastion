@@ -36,28 +36,82 @@ const heroImage = new URL("./images/image-1.png", import.meta.url).href;
 const whyBastionImage = new URL("./images/image-2.png", import.meta.url).href;
 const vilkaViArImage = new URL("./images/image-3.jpg", import.meta.url).href;
 
-const logoAssets = [
-  { filename: "logo-dark.svg", label: "Mörk logotyp", previewClass: "bg-white" },
-  { filename: "logo-light.svg", label: "Ljus logotyp", previewClass: "bg-graphite-900" },
-  { filename: "favicon.svg", label: "Favicon", previewClass: "bg-white" },
+const logoGroups = [
+  {
+    name: "Logo dark",
+    label: "Mörk logotyp",
+    previewSrc: "/logo-dark.svg",
+    previewClass: "bg-white",
+    imageClass: "max-h-14 w-full object-contain",
+    downloads: [
+      { filename: "logo-dark.svg", fileType: "SVG", href: "/logo-dark.svg" },
+      { filename: "logo-dark.png", fileType: "PNG", href: "/logo-dark.png" },
+    ],
+  },
+  {
+    name: "Logo light",
+    label: "Ljus logotyp",
+    previewSrc: "/logo-light.svg",
+    previewClass: "bg-graphite-900",
+    imageClass: "max-h-14 w-full object-contain",
+    downloads: [
+      { filename: "logo-light.svg", fileType: "SVG", href: "/logo-light.svg" },
+      { filename: "logo-light.png", fileType: "PNG", href: "/logo-light.png" },
+    ],
+  },
+  {
+    name: "Favicon",
+    label: "Favicon",
+    previewSrc: "/favicon.svg",
+    previewClass: "bg-white",
+    imageClass: "h-14 w-14",
+    downloads: [
+      { filename: "favicon.svg", fileType: "SVG", href: "/favicon.svg" },
+    ],
+  },
 ];
 
-const designColors = [
-  { name: "Warm background", hex: "#F4F0EA" },
-  { name: "Surface", hex: "#ECE6DD" },
-  { name: "Subtle surface", hex: "#F4F0EA" },
-  { name: "Primary text", hex: "#1F1C1A" },
-  { name: "Secondary text", hex: "#6F6861" },
-  { name: "Muted text", hex: "#CFC5BA" },
-  { name: "Petrol", hex: "#2F5D62" },
-  { name: "Petrol hover", hex: "#274D51" },
-  { name: "Petrol active", hex: "#203F42" },
-  { name: "Rust orange", hex: "#B94A1E" },
-  { name: "Neutral border", hex: "#DED6CC" },
-  { name: "Divider", hex: "#DED6CC" },
-  { name: "Dark surface", hex: "#2B2623" },
-  { name: "Footer dark", hex: "#1F1C1A" },
-  { name: "Light text", hex: "#FFFFFF" },
+const imageAssets = [
+  { filename: "image-1.png", fileType: "PNG", href: "/assets/design/image-1.png", label: "Hero image" },
+  { filename: "image-2.png", fileType: "PNG", href: "/assets/design/image-2.png", label: "Capacity image" },
+  { filename: "image-3.jpg", fileType: "JPG", href: "/assets/design/image-3.jpg", label: "About image" },
+  { filename: "background-grid.png", fileType: "PNG", href: "/background-grid.png", label: "Bakgrundsrutnät" },
+  { filename: "og-image.jpg", fileType: "JPG", href: "/og-image.jpg", label: "OG image" },
+];
+
+const colorCategories = [
+  {
+    title: "Primary colors",
+    colors: [
+      { name: "Petrol", hex: "#2F5D62" },
+      { name: "Rust / orange accent", hex: "#B94A1E" },
+    ],
+  },
+  {
+    title: "Neutral colors",
+    colors: [
+      { name: "Main warm background", hex: "#F4F0EA" },
+      { name: "Surface", hex: "#ECE6DD" },
+      { name: "Subtle surface", hex: "#F4F0EA" },
+      { name: "Neutral border", hex: "#DED6CC" },
+      { name: "Divider", hex: "#DED6CC" },
+    ],
+  },
+  {
+    title: "Text colors",
+    colors: [
+      { name: "Primary text", hex: "#1F1C1A" },
+      { name: "Secondary text", hex: "#6F6861" },
+      { name: "Muted text", hex: "#CFC5BA" },
+    ],
+  },
+  {
+    title: "State colors",
+    colors: [
+      { name: "Petrol hover", hex: "#274D51" },
+      { name: "Petrol active", hex: "#203F42" },
+    ],
+  },
 ];
 
 const typographySamples = [
@@ -735,10 +789,21 @@ const LegalPage = () => (
 );
 
 const DesignSection = ({ children, title }: { children: ReactNode, title: string }) => (
-  <section className="bg-white border border-outline-variant rounded-[10px] p-5 md:p-8 shadow-sm shadow-graphite-900/5">
-    <h2 className="font-headline text-2xl md:text-3xl font-semibold text-on-surface tracking-normal mb-6">{title}</h2>
+  <section className="bg-white border border-outline-variant rounded-[10px] p-5 md:p-7 shadow-sm shadow-graphite-900/5">
+    <h2 className="font-headline text-2xl font-semibold text-on-surface tracking-normal mb-5">{title}</h2>
     {children}
   </section>
+);
+
+const DownloadButton = ({ href, label }: { href: string, label?: string }) => (
+  <a
+    className="inline-flex items-center justify-center gap-2 rounded-[10px] bg-[#2F5D62] px-3.5 py-2 text-sm font-semibold text-white transition-all hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2"
+    download
+    href={href}
+  >
+    <Download size={15} strokeWidth={2.5} />
+    {label ?? "Ladda ner"}
+  </a>
 );
 
 const DesignPage = () => (
@@ -755,26 +820,40 @@ const DesignPage = () => (
 
       <div className="space-y-8 md:space-y-10">
         <DesignSection title="Logotyper">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-            {logoAssets.map(({ filename, label, previewClass }) => (
-              <article className="border border-outline-variant rounded-[10px] overflow-hidden bg-graphite-100" key={filename}>
-                <div className={`h-40 flex items-center justify-center p-8 ${previewClass}`}>
-                  <img
-                    className={filename === "favicon.svg" ? "h-16 w-16" : "max-h-16 w-full object-contain"}
-                    src={`/${filename}`}
-                    alt={label}
-                  />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {logoGroups.map(({ name, label, previewSrc, previewClass, imageClass, downloads }) => (
+              <article className="border border-outline-variant rounded-[10px] overflow-hidden bg-white" key={name}>
+                <div className={`h-32 flex items-center justify-center p-6 ${previewClass}`}>
+                  <img className={imageClass} src={previewSrc} alt={label} />
                 </div>
-                <div className="p-4 md:p-5 bg-white border-t border-outline-variant">
-                  <p className="font-semibold text-on-surface mb-4">{filename}</p>
-                  <a
-                    className="inline-flex items-center gap-2 rounded-[10px] bg-[#2F5D62] px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2"
-                    download
-                    href={`/${filename}`}
-                  >
-                    <Download size={16} strokeWidth={2.5} />
-                    Ladda ner
-                  </a>
+                <div className="p-4 border-t border-outline-variant">
+                  <p className="font-semibold text-on-surface mb-3">{name}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {downloads.map(({ filename, fileType, href }) => (
+                      <span key={filename}>
+                        <DownloadButton href={href} label={fileType} />
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </DesignSection>
+
+        <DesignSection title="Bildfiler">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {imageAssets.map(({ filename, fileType, href, label }) => (
+              <article className="border border-outline-variant rounded-[10px] overflow-hidden bg-graphite-100" key={filename}>
+                <div className="h-36 bg-white">
+                  <img className="h-full w-full object-cover" src={href} alt={label} />
+                </div>
+                <div className="p-4 bg-white border-t border-outline-variant">
+                  <div className="mb-3 flex items-baseline justify-between gap-3">
+                    <p className="font-semibold text-on-surface">{filename}</p>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant">{fileType}</p>
+                  </div>
+                  <DownloadButton href={href} />
                 </div>
               </article>
             ))}
@@ -782,17 +861,24 @@ const DesignPage = () => (
         </DesignSection>
 
         <DesignSection title="Färger">
-          <div className="divide-y divide-outline-variant border border-outline-variant rounded-[10px] overflow-hidden">
-            {designColors.map(({ name, hex }) => (
-              <div className="grid grid-cols-[56px_1fr] md:grid-cols-[72px_1fr_140px_180px] gap-4 items-center bg-white p-4" key={name}>
-                <div
-                  aria-label={`${name} ${hex}`}
-                  className="h-11 w-11 rounded-[10px] border border-outline-variant shadow-sm"
-                  style={{ backgroundColor: hex }}
-                />
-                <p className="font-semibold text-on-surface">{name}</p>
-                <p className="font-mono text-sm text-on-surface-variant">{hex}</p>
-                <p className="font-mono text-sm text-on-surface-variant">{hexToRgb(hex)}</p>
+          <div className="space-y-6">
+            {colorCategories.map(({ title, colors }) => (
+              <div key={title}>
+                <h3 className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-accent">{title}</h3>
+                <div className="divide-y divide-outline-variant border border-outline-variant rounded-[10px] overflow-hidden">
+                  {colors.map(({ name, hex }) => (
+                    <div className="grid grid-cols-[48px_1fr] md:grid-cols-[56px_1fr_120px_160px] gap-3 items-center bg-white p-3" key={`${title}-${name}`}>
+                      <div
+                        aria-label={`${name} ${hex}`}
+                        className="h-9 w-9 rounded-[8px] border border-outline-variant shadow-sm"
+                        style={{ backgroundColor: hex }}
+                      />
+                      <p className="font-semibold text-on-surface">{name}</p>
+                      <p className="font-mono text-sm text-on-surface-variant">{hex}</p>
+                      <p className="font-mono text-sm text-on-surface-variant">{hexToRgb(hex)}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
