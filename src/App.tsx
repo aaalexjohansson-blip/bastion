@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { id: "capacity", label: "Kapacitet" },
+  { id: "capacity", label: "Vår förmåga" },
   { id: "why-bastion", label: "Varför Bastion" },
   { id: "vilka-vi-ar", label: "Vilka vi är" },
 ];
@@ -195,7 +195,7 @@ const HeroImageIllustration = () => {
   }, []);
 
   return (
-    <div className="hidden lg:block absolute right-[-12vw] top-[calc(50%-56px)] z-0 w-[76vw] -translate-y-1/2 pointer-events-none select-none xl:right-[-8vw]">
+    <div className="hidden lg:block absolute right-[-16vw] top-[calc(50%-56px)] z-0 w-[76vw] -translate-y-1/2 pointer-events-none select-none xl:right-[-12vw]">
       <div ref={imageRef} className="relative w-full will-change-transform">
         <img className="relative block w-full h-auto object-contain opacity-90" src={heroImage} alt="" aria-hidden="true" />
       </div>
@@ -217,8 +217,7 @@ const WhyBastionImage = () => {
         return;
       }
 
-      const offset = Math.max(-50, Math.min(50, window.scrollY * 0.04));
-      imageRef.current.style.transform = `translate3d(0, ${offset}px, 0) scale(1.16)`;
+      imageRef.current.style.transform = "scale(1.16)";
     };
 
     const handleScroll = () => {
@@ -371,7 +370,7 @@ const Navbar = () => {
 };
 
 const Hero = () => (
-  <section id="hero" className="anchor-section w-full relative overflow-hidden bg-transparent pt-12 pb-16 md:py-32">
+  <section id="hero" className="anchor-section w-full relative overflow-hidden bg-transparent pt-10 pb-8 md:pt-20 md:pb-10">
     <HeroImageIllustration />
     <div className="max-w-[1280px] mx-auto px-5 md:px-8 relative z-20 flex flex-col items-start text-left">
       <motion.span 
@@ -388,39 +387,37 @@ const Hero = () => (
         transition={{ delay: 0.1 }}
         className="font-headline text-4xl md:text-6xl lg:text-7xl font-semibold text-on-surface mb-5 md:mb-6 leading-[1.08] md:leading-[1.05] max-w-3xl tracking-tight"
       >
-        Operativ kapacitet <span className="desktop-break" />för samhällskritisk <span className="desktop-break" />infrastruktur
+        För samhällskritisk <span className="desktop-break" />infrastruktur
       </motion.h1>
       
-      <motion.p 
+      <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="text-xl md:text-3xl text-on-surface font-semibold max-w-2xl mb-4 leading-[1.18] md:leading-[1.12] tracking-normal"
+        className="max-w-3xl space-y-4 md:space-y-5"
       >
-        Från spridd kapacitet till organiserad förmåga
-      </motion.p>
-
-      <motion.p 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-        className="text-base md:text-lg text-on-surface-variant max-w-3xl mb-6 md:mb-10 leading-relaxed font-medium opacity-90"
-      >
-        Bastion organiserar och samordnar bolag med operativ fältkapacitet för att driva, underhålla och återställa samhällskritisk infrastruktur.
-      </motion.p>
-      
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3 }}
-        className="grid w-full grid-cols-1 gap-3 sm:flex sm:w-auto sm:flex-wrap sm:gap-4"
-      >
-        <a className="hidden sm:flex bg-[#2F5D62] text-white px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all items-center justify-center gap-2 shadow-sm shadow-black/10" href="#capacity">
-          Läs mer
-        </a>
-        <a className="w-full sm:w-auto bg-[#2F5D62] sm:bg-white border border-[#2F5D62] sm:border-outline-variant text-white sm:text-on-surface px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest text-center hover:bg-[#274D51] sm:hover:bg-graphite-100 active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all" href="#contact">
-          Kontakt
-        </a>
+        <p className="text-base md:text-lg text-on-surface-variant leading-relaxed font-medium opacity-90">
+          Bastion samlar lokalt förankrade specialistbolag med kompetens att reparera, återställa och driva kritisk infrastruktur; i både löpande verksamhet och vid större händelser.
+        </p>
+        <p className="text-base md:text-lg text-on-surface-variant leading-relaxed font-medium opacity-90">
+          Runt om i landet finns en stark men fragmenterad förmåga. Mindre aktörer arbetar nära systemen varje dag, men har begränsade möjligheter att verka i större uppdrag och sammanhang.
+        </p>
+        <p className="text-base md:text-lg text-on-surface-variant leading-relaxed font-medium opacity-90">
+          Bastion samlar och strukturerar denna förmåga. Det gör resurserna mer tillgängliga, möjliga att samordna och enklare att mobilisera när behoven ökar, samtidigt som det öppnar för fler och större uppdrag och stärker tillgången till resurser när de behövs.
+        </p>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3 }}
+          className="grid w-full grid-cols-1 gap-3 self-start pt-1 md:pt-2 sm:flex sm:w-auto sm:flex-wrap sm:gap-4"
+        >
+          <a className="hidden sm:flex bg-[#2F5D62] text-white px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all items-center justify-center gap-2 shadow-sm shadow-black/10" href="#capacity">
+            Läs mer
+          </a>
+          <a className="w-full sm:w-auto bg-[#2F5D62] sm:bg-white border border-[#2F5D62] sm:border-outline-variant text-white sm:text-on-surface px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest text-center hover:bg-[#274D51] sm:hover:bg-graphite-100 active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all" href="#contact">
+            Kontakt
+          </a>
+        </motion.div>
       </motion.div>
     </div>
   </section>
@@ -446,10 +443,10 @@ const CapacitySection = () => (
   <section id="capacity" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-12">
     <div className="mb-7 md:mb-8">
       <div className="mb-4">
-        <SectionHeader label="Kapacitet" />
+        <SectionHeader label="VÅR FÖRMÅGA" />
       </div>
       <p className="text-lg text-on-surface-variant leading-relaxed font-medium">
-        Det handlar om lokal och specialiserad förmåga att driva, underhålla och återställa kritiska system.
+        Bolagen inom Bastion verkar där det gör skillnad; lokalt, i fält, nära systemen.
       </p>
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -457,50 +454,50 @@ const CapacitySection = () => (
         icon={Zap} 
         iconFill="#E7CFC4"
         title="Energisystem" 
-        description="Kapacitet att reparera och återställa elnät och energisystem." 
+        description="Ser till att elen fungerar och kommer tillbaka när den försvinner." 
       />
       <CapacityCard 
         icon={Droplet} 
         iconFill="#D6E3E3"
         title="Vattenförsörjning" 
-        description="Kapacitet att säkra vattenförsörjning och återställa ledningsnät." 
+        description="Säkrar vattenförsörjning, återställer ledningsnät och får systemen att fungera igen." 
       />
       <CapacityCard 
         icon={Settings} 
         iconFill="#E3DFDA"
         title="Tekniska system" 
-        description="Kapacitet att återställa tekniska system i fastigheter och industri." 
+        description="Återställer teknisk funktion i fastigheter och industri." 
       />
       <CapacityCard 
         icon={ShieldCheck} 
         iconFill="#E2D6C8"
         title="Drift och underhåll" 
-        description="Kapacitet att stödja drift och underhåll av kritiska anläggningar." 
+        description="Håller kritiska anläggningar i gång, varje dag och över tid." 
       />
     </div>
   </section>
 );
 
 const WhyBastionSection = () => (
-  <section id="why-bastion" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-16">
-    <div className="mb-6 md:mb-9">
-      <SectionHeader label="SAMHÄLLSKRITISK INFRASTRUKTUR" />
-    </div>
-    <div className="grid grid-cols-1 lg:grid-cols-[0.92fr_1.08fr] gap-8 lg:gap-16 items-center">
-      <div className="space-y-5 md:space-y-7">
+  <section id="why-bastion" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-14">
+    <SectionHeader label="SAMHÄLLSKRITISK INFRASTRUKTUR" />
+    <div className="mt-[50px] grid grid-cols-1 lg:grid-cols-[0.92fr_1.08fr] gap-8 lg:gap-16 items-start">
+      <div>
         <h2 className="font-headline text-3xl md:text-5xl font-semibold text-on-surface leading-[1.08] tracking-normal">
-          Varför Bastion behövs
+          Därför behövs Bastion
         </h2>
         
-        <div className="space-y-5">
-          <p className="text-base text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
-            Samhällskritisk infrastruktur drivs och underhålls av ett stort antal lokala specialistbolag. Kompetensen, resurserna och den operativa förmågan finns redan på plats.
+        <div className="space-y-4 mt-7 md:mt-8">
+          <p className="text-base md:text-lg text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
+            I vardagen märks infrastrukturen knappt, den fungerar.
+            <br />
+            När den sätts under press krävs snabb mobilisering och uthållighet.
           </p>
-          <p className="text-base text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
-            Samtidigt är kapaciteten ofta spridd och svår att mobilisera när större störningar uppstår – exempelvis vid stormar, översvämningar, omfattande strömavbrott eller andra händelser som påverkar samhällsviktiga funktioner.
+          <p className="text-base md:text-lg text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
+            Idag är resurserna spridda över många mindre aktörer. Trots hög kompetens är de svåra att samla och använda i större skala.
           </p>
-          <p className="text-base text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
-            Bastion organiserar denna kapacitet i en gemensam struktur. Det möjliggör snabbare mobilisering, bättre samordning och högre uthållighet när samhällets viktigaste system påverkas.
+          <p className="text-base md:text-lg text-on-surface-variant max-w-xl font-medium opacity-90 leading-relaxed">
+            Bastion skapar en gemensam struktur som gör lokal förmåga användbar i ett större sammanhang. Det ger bättre tillgänglighet, högre tempo och ökad uthållighet när det verkligen gäller.
           </p>
         </div>
       </div>
@@ -521,16 +518,19 @@ const VilkaViArSection = () => (
             <img className="h-full w-full object-cover brightness-90 contrast-95" src={vilkaViArImage} alt="" aria-hidden="true" />
           </div>
         </div>
-        <div className="lg:col-span-7 space-y-5 md:space-y-6">
+        <div className="lg:col-span-7 space-y-4 md:space-y-5">
           <h2 className="text-xs font-bold text-[#D36A3C] tracking-[0.2em] uppercase">OM BASTION</h2>
           <h3 className="font-headline text-3xl md:text-6xl font-semibold text-white tracking-normal leading-[1.08] md:leading-[1.05]">
             Vilka vi är
           </h3>
-          <p className="text-base md:text-lg text-[#E5DED6] max-w-2xl font-medium opacity-90 leading-relaxed">
-            Bastion är initierat av personer med bakgrund inom energi, fastigheter, industri, säkerhet och beredskap.
+          <p className="text-sm text-[#E5DED6] max-w-2xl font-medium opacity-90 leading-relaxed">
+            Bastion är initierat av personer med bakgrund inom industri, fastigheter, säkerhet och beredskap.
           </p>
-          <p className="text-base md:text-lg text-[#E5DED6] max-w-2xl font-medium opacity-90 leading-relaxed">
-            Vi har lång operativ erfarenhet av arbete nära samhällskritisk infrastruktur och entreprenörsdrivna bolag.
+          <p className="text-sm text-[#E5DED6] max-w-2xl font-medium opacity-90 leading-relaxed">
+            Vi har lång erfarenhet av att arbeta nära både kritiska verksamheter och entreprenörsdrivna bolag där genomförande, ansvar och samarbete avgör utfallet.
+          </p>
+          <p className="text-sm text-[#E5DED6] max-w-2xl font-medium opacity-90 leading-relaxed">
+            Vi bygger vidare på starka, självständiga bolag med lokal närvaro och stärker deras möjligheter att verka tillsammans i större sammanhang.
           </p>
         </div>
       </div>
@@ -574,10 +574,10 @@ const CTASection = () => {
             <div className="space-y-5 md:space-y-6">
               <h2 className="text-xs font-bold text-[#B94A1E] tracking-[0.2em] uppercase">KONTAKT</h2>
               <h2 className="font-headline text-3xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.08] md:leading-[1.05]">
-                Kontakt och dialog
+                Dialog
               </h2>
               <p className="text-base md:text-lg text-on-surface-variant max-w-2xl font-medium opacity-90 leading-relaxed">
-                För frågor om Bastions struktur, kapacitet eller samverkan kring samhällskritisk infrastruktur, kontakta oss.
+                Vill du veta mer om Bastion eller diskutera samarbete, hör av dig.
               </p>
             </div>
             
@@ -668,7 +668,7 @@ const Footer = () => (
           <a className="text-[10px] font-black uppercase tracking-[0.2em] text-on-primary/70 hover:text-on-primary transition-colors" href="/legal#villkor">Användarvillkor</a>
         </div>
         <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-on-primary/60 md:col-span-2 border-t border-on-primary/10 pt-8">
-          © 2026 Bastion. Operativ kapacitet för samhällskritisk infrastruktur.
+          © 2026 Bastion. För samhällskritisk infrastruktur.
         </div>
       </div>
     </div>
@@ -921,7 +921,7 @@ export default function App() {
         <DesignPage />
       ) : isLegalPage ? (
         <LegalPage />
-      ) : (
+        ) : (
         <main className="relative z-10 pt-20">
           <Hero />
           <CapacitySection />
