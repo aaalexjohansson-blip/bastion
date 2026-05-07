@@ -22,19 +22,191 @@ const navItems = [
   { id: "vilka-vi-ar", label: "Vilka vi är" },
 ];
 
-const activeNavLinkClass = "text-sm font-semibold text-[#B94A1E] border-b-2 border-[#B94A1E] px-4 py-2 transition-colors";
-const inactiveNavLinkClass = "text-sm font-medium text-on-surface border-b-2 border-transparent hover:text-primary transition-colors px-4 py-2 hover:bg-graphite-100 rounded-[10px]";
+const activeNavLinkClass = "text-sm font-semibold text-[#B94A1E] border-b-2 border-[#B94A1E] px-4 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2";
+const inactiveNavLinkClass = "text-sm font-medium text-on-surface border-b-2 border-transparent hover:text-primary transition-colors px-4 py-2 hover:bg-graphite-100 rounded-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2";
 
-const SectionHeader = ({ label }: { label: string }) => (
-  <div className="flex items-center gap-4">
-    <h2 className="text-xs font-bold text-[#B94A1E] tracking-[0.2em] uppercase">{label}</h2>
-    <div className="h-px bg-[#B94A1E]/65 flex-grow" />
-  </div>
-);
+const SectionHeader = ({ asHeading = false, label }: { asHeading?: boolean, label: string }) => {
+  const labelClass = "text-xs font-bold text-[#B94A1E] tracking-[0.2em] uppercase";
+
+  return (
+    <div className="flex items-center gap-4">
+      {asHeading ? (
+        <h2 className={labelClass}>{label}</h2>
+      ) : (
+        <p className={labelClass}>{label}</p>
+      )}
+      <div className="h-px bg-[#B94A1E]/65 flex-grow" />
+    </div>
+  );
+};
 
 const heroImage = new URL("./images/image-1.png", import.meta.url).href;
 const whyBastionImage = new URL("./images/image-2.png", import.meta.url).href;
 const vilkaViArImage = new URL("./images/image-3.jpg", import.meta.url).href;
+
+const siteUrl = "https://bastiongroup.se";
+const defaultOgImage = `${siteUrl}/og-image.jpg`;
+
+type RouteKey = "home" | "legal" | "design" | "notFound";
+
+const routeMetadata: Record<RouteKey, {
+  title: string;
+  description: string;
+  canonical?: string;
+  noindex?: boolean;
+}> = {
+  home: {
+    title: "Bastion | Operativ kapacitet för samhällskritisk infrastruktur",
+    description:
+      "Operativ kapacitet för samhällskritisk infrastruktur. Bastion samordnar lokal och specialiserad förmåga för att driva, underhålla och återställa kritiska system.",
+    canonical: `${siteUrl}/`,
+  },
+  legal: {
+    title: "Integritetspolicy och användarvillkor | Bastion",
+    description: "Läs Bastions integritetspolicy och användarvillkor för webbplatsen.",
+    canonical: `${siteUrl}/legal`,
+  },
+  design: {
+    title: "Designresurser | Bastion",
+    description: "Bastions logotyper, färger, typografi och bildresurser.",
+    noindex: true,
+  },
+  notFound: {
+    title: "Sidan hittades inte | Bastion",
+    description: "Sidan du söker finns inte eller har flyttats.",
+    noindex: true,
+  },
+};
+
+const setMetaTag = (selector: string, attribute: "name" | "property", value: string, content: string) => {
+  let element = document.head.querySelector<HTMLMetaElement>(selector);
+
+  if (!element) {
+    element = document.createElement("meta");
+    element.setAttribute(attribute, value);
+    document.head.appendChild(element);
+  }
+
+  element.setAttribute("content", content);
+};
+
+const setCanonical = (href?: string) => {
+  const existingCanonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+
+  if (!href) {
+    existingCanonical?.remove();
+    return;
+  }
+
+  const canonical = existingCanonical ?? document.createElement("link");
+  canonical.setAttribute("rel", "canonical");
+  canonical.setAttribute("href", href);
+
+  if (!existingCanonical) {
+    document.head.appendChild(canonical);
+  }
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
+      name: "Bastion",
+      url: `${siteUrl}/`,
+      logo: `${siteUrl}/logo-dark.png`,
+      image: defaultOgImage,
+      email: "sofia@bastiongroup.se",
+      telephone: "+46737087808",
+      description:
+        "Operativ kapacitet för samhällskritisk infrastruktur. Bastion samordnar lokal och specialiserad förmåga för att driva, underhålla och återställa kritiska system.",
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      name: "Bastion",
+      url: `${siteUrl}/`,
+      publisher: {
+        "@id": `${siteUrl}/#organization`,
+      },
+      inLanguage: "sv-SE",
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${siteUrl}/#professional-service`,
+      name: "Bastion",
+      url: `${siteUrl}/`,
+      image: defaultOgImage,
+      email: "sofia@bastiongroup.se",
+      telephone: "+46737087808",
+      description:
+        "Bastion samlar lokalt förankrade specialistbolag med kompetens att reparera, återställa och driva kritisk infrastruktur.",
+      parentOrganization: {
+        "@id": `${siteUrl}/#organization`,
+      },
+    },
+  ],
+};
+
+const syncStructuredData = (includeStructuredData: boolean) => {
+  const scriptId = "bastion-structured-data";
+  const existingScript = document.getElementById(scriptId);
+
+  if (!includeStructuredData) {
+    existingScript?.remove();
+    return;
+  }
+
+  const script = (existingScript ?? document.createElement("script")) as HTMLScriptElement;
+  script.id = scriptId;
+  script.type = "application/ld+json";
+  script.textContent = JSON.stringify(structuredData);
+
+  if (!existingScript) {
+    document.head.appendChild(script);
+  }
+};
+
+const useRouteMetadata = (routeKey: RouteKey) => {
+  useEffect(() => {
+    const metadata = routeMetadata[routeKey];
+
+    document.title = metadata.title;
+    setMetaTag('meta[name="description"]', "name", "description", metadata.description);
+    setMetaTag(
+      'meta[name="robots"]',
+      "name",
+      "robots",
+      metadata.noindex ? "noindex, follow" : "index, follow",
+    );
+    setCanonical(metadata.canonical);
+    syncStructuredData(!metadata.noindex);
+
+    setMetaTag('meta[property="og:title"]', "property", "og:title", metadata.title);
+    setMetaTag('meta[property="og:description"]', "property", "og:description", metadata.description);
+    setMetaTag('meta[property="og:type"]', "property", "og:type", "website");
+    setMetaTag(
+      'meta[property="og:url"]',
+      "property",
+      "og:url",
+      metadata.canonical ?? `${siteUrl}${window.location.pathname}`,
+    );
+    setMetaTag('meta[property="og:image"]', "property", "og:image", defaultOgImage);
+    setMetaTag('meta[property="og:image:width"]', "property", "og:image:width", "1200");
+    setMetaTag('meta[property="og:image:height"]', "property", "og:image:height", "630");
+    setMetaTag(
+      'meta[property="og:image:alt"]',
+      "property",
+      "og:image:alt",
+      "Bastion - Operativ kapacitet för samhällskritisk infrastruktur",
+    );
+    setMetaTag('meta[name="twitter:card"]', "name", "twitter:card", "summary_large_image");
+    setMetaTag('meta[name="twitter:title"]', "name", "twitter:title", metadata.title);
+    setMetaTag('meta[name="twitter:description"]', "name", "twitter:description", metadata.description);
+    setMetaTag('meta[name="twitter:image"]', "name", "twitter:image", defaultOgImage);
+  }, [routeKey]);
+};
 
 const logoGroups = [
   {
@@ -197,7 +369,7 @@ const HeroImageIllustration = () => {
   return (
     <div className="hidden lg:block absolute right-[-16vw] top-[calc(50%-56px)] z-0 w-[76vw] -translate-y-1/2 pointer-events-none select-none xl:right-[-12vw]">
       <div ref={imageRef} className="relative w-full will-change-transform">
-        <img className="relative block w-full h-auto object-contain opacity-90" src={heroImage} alt="" aria-hidden="true" />
+        <img className="relative block w-full h-auto object-contain opacity-90" src={heroImage} alt="" aria-hidden="true" decoding="async" />
       </div>
     </div>
   );
@@ -247,6 +419,8 @@ const WhyBastionImage = () => {
       src={whyBastionImage}
       alt=""
       aria-hidden="true"
+      decoding="async"
+      loading="lazy"
     />
   );
 };
@@ -348,7 +522,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 border-b border-outline-variant backdrop-blur-md">
       <div className="max-w-[1280px] mx-auto px-5 md:px-8 h-16 md:h-20 grid grid-cols-[auto_1fr_auto] items-center">
         <a className="flex items-center min-w-0" href="/">
-          <img className="h-[18px] md:h-[22px] w-auto max-w-[170px]" src="/logo-dark.svg" alt="Bastion" />
+          <img className="h-[18px] md:h-[22px] w-auto max-w-[170px]" src="/logo-dark.svg" alt="Bastion" decoding="async" />
         </a>
         <div className="hidden md:flex items-center justify-center gap-4 text-center">
           {navItems.map(({ id, label }) => (
@@ -387,7 +561,7 @@ const Hero = () => (
         transition={{ delay: 0.1 }}
         className="font-headline text-4xl md:text-6xl lg:text-7xl font-semibold text-on-surface mb-5 md:mb-6 leading-[1.08] md:leading-[1.05] max-w-3xl tracking-tight"
       >
-        För samhällskritisk <span className="desktop-break" />infrastruktur
+        Bastion för samhällskritisk <span className="desktop-break" />infrastruktur
       </motion.h1>
       
       <motion.div 
@@ -443,7 +617,7 @@ const CapacitySection = () => (
   <section id="capacity" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-12">
     <div className="mb-7 md:mb-8">
       <div className="mb-4">
-        <SectionHeader label="VÅR FÖRMÅGA" />
+        <SectionHeader label="VÅR FÖRMÅGA" asHeading />
       </div>
       <p className="text-lg text-on-surface-variant leading-relaxed font-medium">
         Bolagen inom Bastion verkar där det gör skillnad; lokalt, i fält, nära systemen.
@@ -515,14 +689,14 @@ const VilkaViArSection = () => (
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 items-center">
         <div className="lg:col-span-5">
           <div className="relative aspect-[4/3] w-full rounded-[10px] border border-outline-variant bg-gradient-to-b from-white to-graphite-100 overflow-hidden">
-            <img className="h-full w-full object-cover brightness-90 contrast-95" src={vilkaViArImage} alt="" aria-hidden="true" />
+            <img className="h-full w-full object-cover brightness-90 contrast-95" src={vilkaViArImage} alt="" aria-hidden="true" decoding="async" loading="lazy" />
           </div>
         </div>
         <div className="lg:col-span-7 space-y-4 md:space-y-5">
-          <h2 className="text-xs font-bold text-[#D36A3C] tracking-[0.2em] uppercase">OM BASTION</h2>
-          <h3 className="font-headline text-3xl md:text-6xl font-semibold text-white tracking-normal leading-[1.08] md:leading-[1.05]">
+          <p className="text-xs font-bold text-[#D36A3C] tracking-[0.2em] uppercase">OM BASTION</p>
+          <h2 className="font-headline text-3xl md:text-6xl font-semibold text-white tracking-normal leading-[1.08] md:leading-[1.05]">
             Vilka vi är
-          </h3>
+          </h2>
           <p className="text-sm text-[#E5DED6] max-w-2xl font-medium opacity-90 leading-relaxed">
             Bastion är initierat av personer med bakgrund inom industri, fastigheter, säkerhet och beredskap.
           </p>
@@ -572,7 +746,7 @@ const CTASection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 items-start">
           <div className="lg:col-span-7 space-y-8 md:space-y-10">
             <div className="space-y-5 md:space-y-6">
-              <h2 className="text-xs font-bold text-[#B94A1E] tracking-[0.2em] uppercase">KONTAKT</h2>
+              <p className="text-xs font-bold text-[#B94A1E] tracking-[0.2em] uppercase">KONTAKT</p>
               <h2 className="font-headline text-3xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.08] md:leading-[1.05]">
                 Dialog
               </h2>
@@ -613,20 +787,25 @@ const CTASection = () => {
           
           <div className="lg:col-span-5 h-full">
             <div className="bg-white/85 backdrop-blur-md p-6 md:p-10 rounded-[10px] border border-outline-variant shadow-sm shadow-graphite-900/5 h-full flex flex-col justify-center">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.25em] text-on-surface mb-4 opacity-60">HÅLL DIG UPPDATERAD</h4>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-on-surface mb-4 opacity-60">HÅLL DIG UPPDATERAD</p>
               <p className="text-sm font-medium text-on-surface-variant mb-8 leading-relaxed">
                 Anmäl dig för att ta del av uppdateringar om Bastions arbete och utveckling.
               </p>
               <form className="space-y-3" onSubmit={handleSubscribe}>
+                <label className="block text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant" htmlFor="newsletter-email">
+                  Din mailadress
+                </label>
                 <input 
-                  aria-label="Din mailadress"
+                  autoComplete="email"
                   className="w-full bg-white border border-outline-variant rounded-[10px] px-4 md:px-5 py-4 text-sm focus:ring-2 focus:ring-graphite-200 focus:border-primary outline-none transition-all placeholder:text-on-surface-variant/50 font-medium" 
                   disabled={subscribeStatus === "loading"}
+                  id="newsletter-email"
                   onChange={(event) => {
                     setEmail(event.target.value);
                     setSubscribeStatus("idle");
                   }}
                   placeholder="Din mailadress" 
+                  required
                   type="email" 
                   value={email}
                 />
@@ -661,7 +840,7 @@ const Footer = () => (
     <div className="max-w-[1280px] mx-auto px-5 md:px-8">
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 md:gap-16 items-start">
         <div>
-          <img className="h-7 w-auto" src="/logo-light.svg" alt="Bastion" />
+          <img className="h-7 w-auto" src="/logo-light.svg" alt="Bastion" decoding="async" loading="lazy" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5 md:justify-items-end">
           <a className="text-[10px] font-black uppercase tracking-[0.2em] text-on-primary/70 hover:text-on-primary transition-colors" href="/legal#integritet">Integritetspolicy</a>
@@ -695,12 +874,12 @@ const LegalPage = () => (
 
           <div className="space-y-8 text-on-surface-variant font-medium leading-relaxed">
             <div>
-              <h3 className="text-xl font-semibold text-on-surface mb-3">1. Allmänt</h3>
+              <h2 className="text-xl font-semibold text-on-surface mb-3">1. Allmänt</h2>
               <p>Bastion värnar om din personliga integritet. Denna policy beskriver hur vi samlar in och använder personuppgifter i samband med användning av vår webbplats.</p>
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-on-surface mb-3">2. Vilka uppgifter vi samlar in</h3>
+              <h2 className="text-xl font-semibold text-on-surface mb-3">2. Vilka uppgifter vi samlar in</h2>
               <p>Vi samlar endast in personuppgifter som du själv lämnar till oss, exempelvis:</p>
               <ul className="mt-3 list-disc space-y-2 pl-6">
                 <li>E-postadress via formulär för kontakt eller uppdateringar</li>
@@ -708,7 +887,7 @@ const LegalPage = () => (
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-on-surface mb-3">3. Syfte med behandlingen</h3>
+              <h2 className="text-xl font-semibold text-on-surface mb-3">3. Syfte med behandlingen</h2>
               <p>Vi behandlar dina uppgifter för att:</p>
               <ul className="mt-3 list-disc space-y-2 pl-6">
                 <li>Kunna kontakta dig vid förfrågningar</li>
@@ -717,17 +896,17 @@ const LegalPage = () => (
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-on-surface mb-3">4. Lagring av uppgifter</h3>
+              <h2 className="text-xl font-semibold text-on-surface mb-3">4. Lagring av uppgifter</h2>
               <p>Vi sparar dina uppgifter endast så länge det är nödvändigt för ändamålet eller tills du begär att bli borttagen.</p>
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-on-surface mb-3">5. Tredjepartstjänster</h3>
+              <h2 className="text-xl font-semibold text-on-surface mb-3">5. Tredjepartstjänster</h2>
               <p>Vi kan använda tredjepartstjänster för drift av webbplatsen och utskick av e-post. Dessa behandlar endast uppgifter enligt våra instruktioner.</p>
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-on-surface mb-3">6. Dina rättigheter</h3>
+              <h2 className="text-xl font-semibold text-on-surface mb-3">6. Dina rättigheter</h2>
               <p>Du har rätt att:</p>
               <ul className="mt-3 list-disc space-y-2 pl-6">
                 <li>Begära tillgång till dina uppgifter</li>
@@ -738,7 +917,7 @@ const LegalPage = () => (
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-on-surface mb-3">7. Kontakt</h3>
+              <h2 className="text-xl font-semibold text-on-surface mb-3">7. Kontakt</h2>
               <p>sofia@bastiongroup.se</p>
             </div>
           </div>
@@ -824,7 +1003,7 @@ const DesignPage = () => (
             {logoGroups.map(({ name, label, previewSrc, previewClass, imageClass, downloads }) => (
               <article className="border border-outline-variant rounded-[10px] overflow-hidden bg-white" key={name}>
                 <div className={`h-32 flex items-center justify-center p-6 ${previewClass}`}>
-                  <img className={imageClass} src={previewSrc} alt={label} />
+                  <img className={imageClass} src={previewSrc} alt={label} decoding="async" loading="lazy" />
                 </div>
                 <div className="p-4 border-t border-outline-variant">
                   <p className="font-semibold text-on-surface mb-3">{name}</p>
@@ -846,7 +1025,7 @@ const DesignPage = () => (
             {imageAssets.map(({ filename, fileType, href, label }) => (
               <article className="border border-outline-variant rounded-[10px] overflow-hidden bg-graphite-100" key={filename}>
                 <div className="h-36 bg-white">
-                  <img className="h-full w-full object-cover" src={href} alt={label} />
+                  <img className="h-full w-full object-cover" src={href} alt={label} decoding="async" loading="lazy" />
                 </div>
                 <div className="p-4 bg-white border-t border-outline-variant">
                   <div className="mb-3 flex items-baseline justify-between gap-3">
@@ -909,19 +1088,49 @@ const DesignPage = () => (
   </main>
 );
 
+const NotFoundPage = () => (
+  <main className="relative z-10 pt-24 md:pt-32 pb-12 md:pb-20">
+    <section className="max-w-[960px] mx-auto px-5 md:px-8">
+      <div className="rounded-[10px] bg-white border border-outline-variant p-6 md:p-12 shadow-sm shadow-graphite-900/5">
+        <p className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-accent">404</p>
+        <h1 className="font-headline text-4xl md:text-6xl font-semibold text-on-surface tracking-normal leading-[1.05] mb-5">
+          Sidan hittades inte
+        </h1>
+        <p className="text-base md:text-lg text-on-surface-variant max-w-2xl font-medium leading-relaxed mb-8">
+          Sidan du söker finns inte eller har flyttats.
+        </p>
+        <a
+          className="inline-flex bg-[#2F5D62] text-white px-8 md:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 transition-all shadow-sm shadow-black/10"
+          href="/"
+        >
+          Till startsidan
+        </a>
+      </div>
+    </section>
+  </main>
+);
+
 export default function App() {
-  const isLegalPage = window.location.pathname === "/legal";
-  const isDesignPage = window.location.pathname === "/design";
+  const pathname = window.location.pathname.replace(/\/+$/, "") || "/";
+  const routeKey: RouteKey =
+    pathname === "/" ? "home" :
+    pathname === "/legal" ? "legal" :
+    pathname === "/design" ? "design" :
+    "notFound";
+
+  useRouteMetadata(routeKey);
 
   return (
     <div className="min-h-screen bg-background text-on-background antialiased selection:bg-accent/20">
       <div className="fixed inset-0 dot-pattern opacity-40 pointer-events-none z-0" />
       <Navbar />
-      {isDesignPage ? (
+      {routeKey === "design" ? (
         <DesignPage />
-      ) : isLegalPage ? (
+      ) : routeKey === "legal" ? (
         <LegalPage />
-        ) : (
+      ) : routeKey === "notFound" ? (
+        <NotFoundPage />
+      ) : (
         <main className="relative z-10 pt-20">
           <Hero />
           <CapacitySection />
