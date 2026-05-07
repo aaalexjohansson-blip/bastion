@@ -17,8 +17,8 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { id: "capacity", label: "Vår förmåga" },
-  { id: "why-bastion", label: "Varför Bastion" },
+  { id: "var-formaga", label: "Vår förmåga" },
+  { id: "varfor-bastion", label: "Varför Bastion" },
   { id: "vilka-vi-ar", label: "Vilka vi är" },
 ];
 
@@ -585,7 +585,7 @@ const Hero = () => (
           transition={{ delay: 0.3 }}
           className="grid w-full grid-cols-1 gap-3 self-start pt-1 md:pt-2 sm:flex sm:w-auto sm:flex-wrap sm:gap-4"
         >
-          <a className="hidden sm:flex bg-[#2F5D62] text-white px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all items-center justify-center gap-2 shadow-sm shadow-black/10" href="#capacity">
+          <a className="hidden sm:flex bg-[#2F5D62] text-white px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest hover:bg-[#274D51] active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all items-center justify-center gap-2 shadow-sm shadow-black/10" href="#var-formaga">
             Läs mer
           </a>
           <a className="w-full sm:w-auto bg-[#2F5D62] sm:bg-white border border-[#2F5D62] sm:border-outline-variant text-white sm:text-on-surface px-8 lg:px-10 py-4 rounded-[10px] font-bold text-sm tracking-widest text-center hover:bg-[#274D51] sm:hover:bg-graphite-100 active:bg-[#203F42] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#203F42] focus-visible:ring-offset-2 active:scale-95 transition-all" href="#contact">
@@ -614,7 +614,7 @@ const CapacityCard = ({ icon: Icon, iconFill, title, description }: { icon: any,
 );
 
 const CapacitySection = () => (
-  <section id="capacity" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-12">
+  <section id="var-formaga" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-12">
     <div className="mb-7 md:mb-8">
       <div className="mb-4">
         <SectionHeader label="VÅR FÖRMÅGA" asHeading />
@@ -653,7 +653,7 @@ const CapacitySection = () => (
 );
 
 const WhyBastionSection = () => (
-  <section id="why-bastion" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-14">
+  <section id="varfor-bastion" className="anchor-section max-w-[1280px] mx-auto px-5 md:px-8 py-10 md:py-14">
     <SectionHeader label="SAMHÄLLSKRITISK INFRASTRUKTUR" />
     <div className="mt-[50px] grid grid-cols-1 lg:grid-cols-[0.92fr_1.08fr] gap-8 lg:gap-16 items-start">
       <div>
