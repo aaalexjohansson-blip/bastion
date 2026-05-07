@@ -40,9 +40,9 @@ const SectionHeader = ({ asHeading = false, label }: { asHeading?: boolean, labe
   );
 };
 
-const heroImage = new URL("./images/image-1.png", import.meta.url).href;
-const whyBastionImage = new URL("./images/image-2.png", import.meta.url).href;
-const vilkaViArImage = new URL("./images/image-3.jpg", import.meta.url).href;
+const heroImage = new URL("./images/image-1.webp", import.meta.url).href;
+const whyBastionImage = new URL("./images/image-2.webp", import.meta.url).href;
+const vilkaViArImage = new URL("./images/image-3.webp", import.meta.url).href;
 
 const siteUrl = "https://bastiongroup.se";
 const defaultOgImage = `${siteUrl}/og-image.jpg`;
@@ -244,9 +244,9 @@ const logoGroups = [
 ];
 
 const imageAssets = [
-  { filename: "image-1.png", fileType: "PNG", href: "/assets/design/image-1.png", label: "Hero image" },
-  { filename: "image-2.png", fileType: "PNG", href: "/assets/design/image-2.png", label: "Capacity image" },
-  { filename: "image-3.jpg", fileType: "JPG", href: "/assets/design/image-3.jpg", label: "About image" },
+  { filename: "image-1.png", fileType: "PNG", href: "/assets/design/image-1.png", label: "Hero image", previewSrc: "/assets/design/image-1.webp" },
+  { filename: "image-2.png", fileType: "PNG", href: "/assets/design/image-2.png", label: "Capacity image", previewSrc: "/assets/design/image-2.webp" },
+  { filename: "image-3.jpg", fileType: "JPG", href: "/assets/design/image-3.jpg", label: "About image", previewSrc: "/assets/design/image-3.webp" },
   { filename: "background-grid.png", fileType: "PNG", href: "/background-grid.png", label: "Bakgrundsrutnät" },
   { filename: "og-image.jpg", fileType: "JPG", href: "/og-image.jpg", label: "OG image" },
 ];
@@ -1022,10 +1022,10 @@ const DesignPage = () => (
 
         <DesignSection title="Bildfiler">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {imageAssets.map(({ filename, fileType, href, label }) => (
+            {imageAssets.map(({ filename, fileType, href, label, previewSrc }) => (
               <article className="border border-outline-variant rounded-[10px] overflow-hidden bg-graphite-100" key={filename}>
                 <div className="h-36 bg-white">
-                  <img className="h-full w-full object-cover" src={href} alt={label} decoding="async" loading="lazy" />
+                  <img className="h-full w-full object-cover" src={previewSrc ?? href} alt={label} decoding="async" loading="lazy" />
                 </div>
                 <div className="p-4 bg-white border-t border-outline-variant">
                   <div className="mb-3 flex items-baseline justify-between gap-3">
